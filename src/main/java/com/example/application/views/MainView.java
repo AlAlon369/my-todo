@@ -1,5 +1,5 @@
 
-package com.example.application.views.main;
+package com.example.application.views;
 
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
@@ -17,9 +17,9 @@ import javax.annotation.security.RolesAllowed;
 @Route(value = "")
 @RolesAllowed("USER")
 
-public class Mainview extends VerticalLayout {
+public class MainView extends VerticalLayout {
 
-    public Mainview() {
+    public MainView() {
         VerticalLayout todosList = new VerticalLayout();
         TextField taskField = new TextField();
         Button addButton = new Button("Add");

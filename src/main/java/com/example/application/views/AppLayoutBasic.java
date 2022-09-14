@@ -1,21 +1,18 @@
-package com.example.application.views.list;
+package com.example.application.views;
 
-import com.example.application.data.entity.Contact;
+import javax.annotation.security.RolesAllowed;
+
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
-
-import javax.annotation.security.RolesAllowed;
 
 @PageTitle("Сотрудники | Vaadin CRM")
 @Route(value = "Employee")
@@ -33,8 +30,6 @@ public class AppLayoutBasic extends AppLayout {
         addToDrawer(tabs);
         addToNavbar(toggle, title);
     }
-    Grid<Contact> grid = new Grid<>(Contact.class);
-    TextField filterText = new TextField();
 
     private Tabs getTabs() {
         Tabs tabs = new Tabs();
@@ -54,22 +49,8 @@ public class AppLayoutBasic extends AppLayout {
                 .set("padding", "var(--lumo-space-xs)");
         RouterLink link = new RouterLink();
         link.add(icon, new Span(viewName));
-        // Demo has no routes
-        // link.setRoute(viewClass.java);
         link.setTabIndex(-1);
 
         return new Tab(link);
     }
-    private void configureGrid() {
-        grid.addClassNames("contact-grid");
-        grid.setSizeFull();
-        grid.setColumns("firstName", "lastName", "email");
-    //    grid.addColumn(contact -> contact.getStatus().getName()).setHeader("Status");
-    //    grid.addColumn(contact -> contact.getCompany().getName()).setHeader("Company");
-        grid.getColumns().forEach(col -> col.setAutoWidth(true));
-    }
 }
-
-
-
-// https://vaadin.com/docs/latest/tutorial/components-and-layouts сделать кнопку для сотрудники, чтобы можно было добавлять контакты.

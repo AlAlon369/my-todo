@@ -2,7 +2,7 @@ package com.example.application.security;
 
 import javax.annotation.security.PermitAll;
 
-import com.example.application.views.LoginView.LoginView;
+import com.example.application.views.LoginView;
 import com.vaadin.flow.spring.security.VaadinWebSecurityConfigurerAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

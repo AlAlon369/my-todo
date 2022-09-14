@@ -1,23 +1,20 @@
-package com.example.application.views.list;
 
-import com.example.application.data.entity.Contact;
+package com.example.application.views;
+
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
 import javax.annotation.security.RolesAllowed;
-import java.util.List;
 
-//@Route(value = "add-employee")
-@Route(value = "add-employees")
+@Route(value = "add-employee")
 @RolesAllowed("USER")
-public class CreateEmployee extends VerticalLayout {
+public class Employees extends FormLayout {
     TextField firstName = new TextField("имя");
     TextField lastName = new TextField("фамилия");
     TextField middleName = new TextField("отчество");
@@ -26,8 +23,11 @@ public class CreateEmployee extends VerticalLayout {
 
     Button save = new Button("Сохранить");
 
-    public CreateEmployee(List<Contact> contacts) {
+
+    public Employees() {
         addClassName("contact-form");
+
+
 
         add(
                 firstName,
@@ -41,8 +41,9 @@ public class CreateEmployee extends VerticalLayout {
 
     private Component createButtonLayout() {
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-
         save.addClickShortcut(Key.ENTER);
         return new HorizontalLayout(save);
+
     }
 }
+

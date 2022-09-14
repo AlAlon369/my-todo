@@ -1,4 +1,4 @@
-package com.example.application.views.LoginView;
+package com.example.application.views;
 
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
@@ -12,7 +12,7 @@ import com.vaadin.flow.router.Route;
 @PageTitle("Login")
 public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
-  private LoginForm login = new LoginForm();
+  private final LoginForm login = new LoginForm();
 
   public LoginView() {
     addClassName("login-view");
