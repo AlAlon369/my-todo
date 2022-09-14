@@ -1,6 +1,5 @@
-package com.example.application.views.main;
 
-import javax.annotation.security.RolesAllowed;
+package com.example.application.views.main;
 
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
@@ -12,12 +11,15 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-@PageTitle("Contacts | Vaadin CRM")
+import javax.annotation.security.RolesAllowed;
+
+@PageTitle("Главная страница")
 @Route(value = "")
 @RolesAllowed("USER")
-public class MainView extends VerticalLayout {
 
-    public MainView() {
+public class Mainview extends VerticalLayout {
+
+    public Mainview() {
         VerticalLayout todosList = new VerticalLayout();
         TextField taskField = new TextField();
         Button addButton = new Button("Add");
@@ -28,12 +30,12 @@ public class MainView extends VerticalLayout {
         addButton.addClickShortcut(Key.ENTER);
 
         add(
-          new H1("Vaadin Todo"),
-          todosList,
-          new HorizontalLayout(
-            taskField,
-            addButton
-          )
+                new H1("Vaadin Todo"),
+                todosList,
+                new HorizontalLayout(
+                        taskField,
+                        addButton
+                )
         );
     }
 }
