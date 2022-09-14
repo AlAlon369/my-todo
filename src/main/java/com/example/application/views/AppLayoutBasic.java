@@ -2,6 +2,7 @@ package com.example.application.views;
 
 import javax.annotation.security.RolesAllowed;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.H1;
@@ -34,13 +35,13 @@ public class AppLayoutBasic extends AppLayout {
     private Tabs getTabs() {
         Tabs tabs = new Tabs();
         tabs.add(
-                createTab(VaadinIcon.DASHBOARD, "Сотрудники")
+                createTab(VaadinIcon.DASHBOARD, "Сотрудники", EmployeesView.class)
         );
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         return tabs;
     }
 
-    private Tab createTab(VaadinIcon viewIcon, String viewName) {
+    private Tab createTab(VaadinIcon viewIcon, String viewName, Class<? extends Component> listViewClass) {
         Icon icon = viewIcon.create();
         icon.getStyle()
                 .set("box-sizing", "border-box")
@@ -50,6 +51,7 @@ public class AppLayoutBasic extends AppLayout {
         RouterLink link = new RouterLink();
         link.add(icon, new Span(viewName));
         link.setTabIndex(-1);
+        link.setRoute(listViewClass);
 
         return new Tab(link);
     }
