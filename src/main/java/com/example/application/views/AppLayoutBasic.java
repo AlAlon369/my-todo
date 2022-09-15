@@ -35,7 +35,8 @@ public class AppLayoutBasic extends AppLayout {
     private Tabs getTabs() {
         Tabs tabs = new Tabs();
         tabs.add(
-                createTab(VaadinIcon.DASHBOARD, "Сотрудники", EmployeesView.class)
+                createTab(VaadinIcon.DASHBOARD, "Сотрудники", EmployeesView.class),
+                createTab(VaadinIcon.DASHBOARD, "Добавить сотрудника", CreateEmployeeView.class)
         );
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         return tabs;
