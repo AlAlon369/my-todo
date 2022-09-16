@@ -8,6 +8,8 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -45,11 +47,11 @@ public class CreateEmployeeView extends VerticalLayout {
   private Component createButtonLayout() {
     save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
     save.addClickShortcut(Key.ENTER);
-    save.addClickListener(event -> save());
+    save.addClickListener(event -> {
+      repository.save(employee);
+      Notification notification = Notification.show("Сотрудник добавлен!");
+      notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+    });
     return new HorizontalLayout(save);
-  }
-
-  private void save() {
-    repository.save(employee);
   }
 }
