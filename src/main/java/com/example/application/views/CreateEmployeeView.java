@@ -18,8 +18,8 @@ import com.vaadin.flow.router.Route;
 @Route(value = "add-employees")
 @RolesAllowed("USER")
 public class CreateEmployeeView extends VerticalLayout {
-  private final EmployeeRepository repository;
-  private final Employee employee = new Employee();
+  private final transient EmployeeRepository repository;
+  private final transient Employee employee = new Employee();
 
   TextField firstName = new TextField("имя");
   TextField lastName = new TextField("фамилия");
