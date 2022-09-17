@@ -35,6 +35,9 @@ public class EmployeesView extends FormLayout {
                 button.getUI().ifPresent(ui ->
                         ui.navigate("add-employees"))
         );
+        HorizontalLayout horizontalLayout = new HorizontalLayout(button);
+        VerticalLayout verticalLayout = new VerticalLayout(horizontalLayout, grid);
+        add(verticalLayout);
     }
 }
 
