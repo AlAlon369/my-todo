@@ -32,11 +32,12 @@ public class AppLayoutBasic extends AppLayout {
         addToNavbar(toggle, title);
     }
 
+
     private Tabs getTabs() {
         Tabs tabs = new Tabs();
         tabs.add(
-                createTab(VaadinIcon.DASHBOARD, "Сотрудники", EmployeesView.class),
-                createTab(VaadinIcon.DASHBOARD, "Добавить сотрудника", CreateEmployeeView.class)
+                createTab(VaadinIcon.DASHBOARD, "Сотрудники", EmployeesView.class)
+            //  createTab(VaadinIcon.DASHBOARD, "Добавить сотрудника", CreateEmployeeView.class)
         );
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         return tabs;
@@ -55,5 +56,6 @@ public class AppLayoutBasic extends AppLayout {
         link.setRoute(listViewClass);
 
         return new Tab(link);
+
     }
 }
