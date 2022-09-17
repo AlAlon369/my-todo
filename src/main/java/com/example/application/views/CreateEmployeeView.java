@@ -17,7 +17,7 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.Route;
 
-@Route(value = "add-employees")
+@Route(value = "add-employees", layout = AppLayoutBasic.class)
 @RolesAllowed("USER")
 public class CreateEmployeeView extends VerticalLayout {
   private final transient EmployeeRepository repository;
