@@ -62,13 +62,13 @@ public class EmployeesView extends FormLayout {
         middleNameField.setWidthFull();
         binder.forField(middleNameField).asRequired("Middle name must not be empty")
                 .bind(Employee::getLastName, Employee::setMiddleName);
-        middleName.setEditorComponent(middleName);
+        middleName.setEditorComponent(middleNameField);
 
         TextField phoneField = new TextField();
         phoneField.setWidthFull();
         binder.forField(phoneField).asRequired("Phone field must not be empty")
                 .bind(Employee::getPhone, Employee::setPhone);
-        phone.setEditorComponent(phone);
+        phone.setEditorComponent(phoneField);
 
         Button saveButton = new Button("Сохранить", e -> editor.save());
         Button cancelButton = new Button(VaadinIcon.CLOSE.create(),
