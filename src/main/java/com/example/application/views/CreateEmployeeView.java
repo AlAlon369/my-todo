@@ -30,6 +30,7 @@ public class CreateEmployeeView extends VerticalLayout {
   Binder<Employee> binder = new BeanValidationBinder<>(Employee.class);
   Button save = new Button("Сохранить");
 
+
   public CreateEmployeeView(EmployeeRepository employeeRepository) {
     binder.bindInstanceFields(this);
     binder.setBean(employee);
@@ -49,8 +50,12 @@ public class CreateEmployeeView extends VerticalLayout {
     save.addClickShortcut(Key.ENTER);
     save.addClickListener(event -> {
       repository.save(employee);
-      Notification notification = Notification.show("Сотрудник добавлен!");
-      notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+      save.addClickListener(e -> {
+        save.getUI().ifPresent(ui ->
+                ui.navigate("employees"));
+        Notification notification = Notification.show("Сотрудник добавлен!");
+        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+      });
     });
     return new HorizontalLayout(save);
   }
