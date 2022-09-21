@@ -3,14 +3,13 @@ package com.example.application.views;
 
 import javax.annotation.security.RolesAllowed;
 
-import org.vaadin.crudui.crud.CrudOperation;
 import org.vaadin.crudui.crud.impl.GridCrud;
 import org.vaadin.crudui.form.CrudFormFactory;
-import org.vaadin.crudui.form.impl.form.factory.DefaultCrudFormFactory;
 
 import com.example.application.data.entity.Employee;
 import com.example.application.data.repository.EmployeeRepository;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
 @Route(value = "employees", layout = AppLayoutBasic.class)
@@ -25,12 +24,22 @@ public class EmployeesView extends FormLayout {
         crud.setUpdateOperation(repository::save);
         crud.setDeleteOperation(repository::delete);
 
-        CrudFormFactory<Employee> formFactory = new DefaultCrudFormFactory<>(Employee.class);
-        formFactory.setVisibleProperties(CrudOperation.ADD, "firstName", "lastName", "middleName", "phone");
-        formFactory.setVisibleProperties(CrudOperation.UPDATE, "firstName", "lastName", "middleName", "phone");
-        crud.setCrudFormFactory(formFactory);
+        translateColumns(crud);
+        translateForms(crud);
 
         add(crud);
+    }
+
+    private  void translateForms(GridCrud<Employee> crud) {
+        CrudFormFactory<Employee> crudFormFactory = crud.getCrudFormFactory();
+        crudFormFactory.setVisibleProperties("firstName", "lastName", "middleName", "phone");
+        crudFormFactory.setFieldCreationListener("firstName", field -> ((TextField) field).setLabel("Имя"));
+        crudFormFactory.setFieldCreationListener("lastName", field -> ((TextField) field).setLabel("Фамилия"));
+    }
+
+    private void translateColumns(GridCrud<Employee> crud) {
+        crud.getGrid().getColumnByKey("firstName").setHeader("Имя");
+        crud.getGrid().getColumnByKey("lastName").setHeader("Фамилия");
     }
 }
 
