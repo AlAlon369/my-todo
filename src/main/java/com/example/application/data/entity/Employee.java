@@ -56,10 +56,12 @@ public class Employee {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-    public boolean getIsHired() {
+
+    public boolean isHired() {
         return isHired;
     }
-    public void setIsHired(boolean ishired) {
-        this.isHired = ishired;
+
+    public void setHired(boolean hired) {
+        isHired = hired;
     }
 }
