@@ -15,6 +15,7 @@ public class Employee {
     private String lastName;
     private String middleName;
     private String phone;
+    private boolean isHired;
 
     public Integer getId() {
         return id;
@@ -54,5 +55,11 @@ public class Employee {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+    public boolean getIsHired() {
+        return isHired;
+    }
+    public void setIsHired(boolean ishired) {
+        this.isHired = ishired;
     }
 }
