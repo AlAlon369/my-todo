@@ -35,11 +35,15 @@ public class EmployeesView extends FormLayout {
         crudFormFactory.setVisibleProperties("firstName", "lastName", "middleName", "phone");
         crudFormFactory.setFieldCreationListener("firstName", field -> ((TextField) field).setLabel("Имя"));
         crudFormFactory.setFieldCreationListener("lastName", field -> ((TextField) field).setLabel("Фамилия"));
+        crudFormFactory.setFieldCreationListener("middleName", field -> ((TextField) field).setLabel("Отчество"));
+        crudFormFactory.setFieldCreationListener("phone", field -> ((TextField) field).setLabel("Телефон"));
     }
 
     private void translateColumns(GridCrud<Employee> crud) {
         crud.getGrid().getColumnByKey("firstName").setHeader("Имя");
         crud.getGrid().getColumnByKey("lastName").setHeader("Фамилия");
+        crud.getGrid().getColumnByKey("middleName").setHeader("Отчество");
+        crud.getGrid().getColumnByKey("phone").setHeader("Телефон");
     }
 }
 
