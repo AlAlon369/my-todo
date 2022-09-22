@@ -49,7 +49,7 @@ public class EmployeesView extends FormLayout {
         grid.getColumnByKey("phone").setHeader("Телефон");
         grid.getColumnByKey("hired").setVisible(false);
         grid.getColumnByKey("id").setVisible(false);
-        grid.addColumn(i -> i.isHired() ? "Да" : "Нет").setHeader("Нанят");
+        grid.addColumn(employee -> employee.isHired() ? "Да" : "Нет").setHeader("Нанят");
     }
 }
 
