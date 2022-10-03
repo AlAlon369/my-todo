@@ -1,45 +1,37 @@
 package com.example.application.controller;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
 import com.example.application.data.TimeSheetDto;
-import com.example.application.data.entity.Employee;
-import com.example.application.data.entity.TimeSheet;
 
 @Component
 public class TimeSheetController {
     public List<TimeSheetDto> findAll() {
-      Employee employee = new Employee();
-      employee.setId(1);
-      employee.setFirstName("Иван");
-      employee.setLastName("Иванов");
+     TimeSheetDto dto1 = new TimeSheetDto();
+     TimeSheetDto dto2 = new TimeSheetDto();
+     TimeSheetDto dto3 = new TimeSheetDto();
 
-      Employee employee2 = new Employee();
-      employee2.setId(2);
-      employee2.setFirstName("Петр");
-      employee2.setLastName("Петров");
+     dto1.setFio("Иванов Иван");
+     dto1.setHoursDay1(5);
+     dto1.setHoursDay3(5);
+     dto1.setHoursDay2(5);
+     dto1.setHoursDay5(5);
 
-      TimeSheet timeSheet = new TimeSheet();
-      timeSheet.setDate(LocalDate.now());
-      timeSheet.setHours(8);
-      timeSheet.setId(1);
-      TimeSheet timeSheet2 = new TimeSheet();
-      timeSheet2.setDate(LocalDate.now());
-      timeSheet2.setHours(7);
-      timeSheet2.setId(2);
+      dto2.setFio("Петров Иван");
+      dto2.setHoursDay1(6);
+      dto2.setHoursDay3(3);
+      dto2.setHoursDay2(3);
+      dto2.setHoursDay5(7);
 
-      TimeSheetDto timeSheetDto = new TimeSheetDto();
-      timeSheetDto.setEmployee(employee);
-      timeSheetDto.setTimeSheets(List.of(timeSheet, timeSheet2));
+      dto3.setFio("Сидоров Иван");
+      dto3.setHoursDay1(2);
+      dto3.setHoursDay3(4);
+      dto3.setHoursDay2(8);
+      dto3.setHoursDay5(4);
 
-      TimeSheetDto timeSheetDto2 = new TimeSheetDto();
-      timeSheetDto2.setEmployee(employee2);
-      timeSheetDto2.setTimeSheets(List.of(timeSheet, timeSheet2));
-
-      return List.of(timeSheetDto, timeSheetDto2);
+      return List.of(dto1, dto2, dto3);
     }
 
     public TimeSheetDto save(TimeSheetDto timeSheetDto) {

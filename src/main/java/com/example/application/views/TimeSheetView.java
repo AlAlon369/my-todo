@@ -1,46 +1,68 @@
 package com.example.application.views;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import javax.annotation.security.RolesAllowed;
 
 import org.vaadin.crudui.crud.impl.GridCrud;
+import org.vaadin.crudui.form.CrudFormFactory;
+import org.vaadin.crudui.layout.impl.VerticalCrudLayout;
 
 import com.example.application.controller.TimeSheetController;
-import com.example.application.data.TimeSheetDto;
-import com.example.application.data.entity.TimeSheet;
+import com.example.application.data.TimeSheetDto  ;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
 @Route(value = "timesheet", layout = AppLayoutBasic.class)
 @RolesAllowed("USER")
 public class TimeSheetView extends FormLayout {
-    public TimeSheetView(TimeSheetController controller) {
-        GridCrud<TimeSheetDto> crud = new GridCrud<>(TimeSheetDto.class);
-        crud.setFindAllOperation(controller::findAll);
-        crud.setAddOperation(controller::save);
+  public TimeSheetView(TimeSheetController controller) {
+    GridCrud<TimeSheetDto> crud = new GridCrud<>(TimeSheetDto.class, new VerticalCrudLayout());
+    crud.setFindAllOperation(controller::findAll);
+    crud.setAddOperation(controller::save);
+    crud.setUpdateOperation(controller::save);
 
-        Grid<TimeSheetDto> grid = crud.getGrid();
-        grid.removeColumnByKey("employee");
-        grid.removeColumnByKey("timeSheets");
-        grid.addColumn(dto -> dto.getEmployee().getFirstName() + " " + dto.getEmployee().getLastName())
-          .setHeader("Фамилия, имя")
-          .setAutoWidth(true);
+    translateForms(crud);
+    setColumns(crud);
 
-        for (int i = 0; i < 7; i++) {
-            int finalI = i;
-            grid.addColumn(dto -> {
-                  List<TimeSheet> timeSheets = dto.getTimeSheets();
-                  if (finalI < timeSheets.size()) {
-                      return timeSheets.get(finalI).getHours();
-                  }
-                  return null;
-              })
-              .setHeader(25 + i + ".10")
-              .setAutoWidth(true);
-        }
+    add(crud);
+  }
 
-        add(crud);
-    }
+  private void translateForms(GridCrud<TimeSheetDto> crud) {
+    CrudFormFactory<TimeSheetDto> crudFormFactory = crud.getCrudFormFactory();
+    crudFormFactory.setVisibleProperties(
+      "hoursDay1",
+      "hoursDay2",
+      "hoursDay3",
+      "hoursDay4",
+      "hoursDay5"
+    );
+
+    LocalDate today = LocalDate.now();
+    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM");
+    crudFormFactory.setFieldCreationListener("hoursDay1",
+      field -> ((TextField) field).setLabel(today.minusDays(4).format(dateFormatter)));
+    crudFormFactory.setFieldCreationListener("hoursDay2",
+      field -> ((TextField) field).setLabel(today.minusDays(3).format(dateFormatter)));
+    crudFormFactory.setFieldCreationListener("hoursDay3",
+      field -> ((TextField) field).setLabel(today.minusDays(2).format(dateFormatter)));
+    crudFormFactory.setFieldCreationListener("hoursDay4",
+      field -> ((TextField) field).setLabel(today.minusDays(1).format(dateFormatter)));
+    crudFormFactory.setFieldCreationListener("hoursDay5", field -> ((TextField) field).setLabel(today.format(dateFormatter)));
+  }
+
+  private void setColumns(GridCrud<TimeSheetDto> crud) {
+    LocalDate today = LocalDate.now();
+    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM");
+    Grid<TimeSheetDto> grid = crud.getGrid();
+    grid.getColumnByKey("fio").setHeader("Сотрудник").setAutoWidth(true);
+    grid.getColumnByKey("hoursDay1").setHeader(today.minusDays(4).format(dateFormatter));
+    grid.getColumnByKey("hoursDay2").setHeader(today.minusDays(3).format(dateFormatter));
+    grid.getColumnByKey("hoursDay3").setHeader(today.minusDays(2).format(dateFormatter));
+    grid.getColumnByKey("hoursDay4").setHeader(today.minusDays(1).format(dateFormatter));
+    grid.getColumnByKey("hoursDay5").setHeader(today.format(dateFormatter));
+  }
 }
