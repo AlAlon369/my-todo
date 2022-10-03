@@ -18,7 +18,7 @@ public class TimeSheetController {
 
   public List<TimeSheetDto> findAll() {
     List<Employee> byHiredTrue = employeeRepository.findByHiredTrue();
-    return List.of(null);
+    return List.of();
   }
 
   public TimeSheetDto save(TimeSheetDto timeSheetDto) {
