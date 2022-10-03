@@ -15,7 +15,7 @@ public class Employee {
     private String lastName;
     private String middleName;
     private String phone;
-    private boolean isHired;
+    private boolean hired;
 
     public Integer getId() {
         return id;
@@ -57,11 +57,11 @@ public class Employee {
         this.phone = phone;
     }
 
-    public boolean isHired() {
-        return isHired;
+    public Boolean getHired() {
+        return hired;
     }
 
-    public void setHired(boolean hired) {
-        isHired = hired;
+    public void setHired(Boolean hired) {
+        this.hired = hired;
     }
 }
