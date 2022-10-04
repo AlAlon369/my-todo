@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
@@ -27,42 +29,54 @@ public class TimeSheetController {
   public List<TimeSheetDto> findAll() {
     List<Employee> hiredEmployees = employeeRepository.findByHiredTrue();
     List<TimeSheet> allTimeSheets = timeSheetRepository.findByDateAfter(LocalDate.now().minusDays(5));
-
+    Map<Integer, List<TimeSheet>> map = collectTimeSheets(allTimeSheets);
     List<TimeSheetDto> list = new ArrayList<>();
     for (Employee hiredEmployee : hiredEmployees) {
       TimeSheetDto timeSheetDto = new TimeSheetDto();
       timeSheetDto.setFio(hiredEmployee.getFirstName() + " " + hiredEmployee.getLastName());
-      setHoursForEmployee(hiredEmployee, timeSheetDto, allTimeSheets);
+      setHoursForEmployee(hiredEmployee, timeSheetDto, map);
       list.add(timeSheetDto);
     }
 
     return list;
   }
 
-  private void setHoursForEmployee(Employee hiredEmployee, TimeSheetDto timeSheetDto, List<TimeSheet> allTimeSheets) {
-    for (TimeSheet sheet : allTimeSheets) {
-      // TimeSheet относится именно к этому hiredEmployee
-      if (sheet.getEmployee().getId().equals(hiredEmployee.getId())) {
-        LocalDate date = sheet.getDate();
-        Integer hours = sheet.getHours();
-        long between = ChronoUnit.DAYS.between(date, LocalDate.now());
-        if (between == 0) {
-          timeSheetDto.setHoursDay5(hours);
-        } else if (between == 1) {
-          timeSheetDto.setHoursDay4(hours);
-        } else if (between == 2) {
-          timeSheetDto.setHoursDay3(hours);
-        } else if (between == 3) {
-          timeSheetDto.setHoursDay2(hours);
-        } else if (between == 4) {
-          timeSheetDto.setHoursDay1(hours);
-        }
+  private Map<Integer, List<TimeSheet>> collectTimeSheets(List<TimeSheet> allTimeSheets) {
+    // Дай мне List по id (Integer), например по id 9
+    return allTimeSheets.stream()
+      .collect(Collectors.toMap(
+          timeSheet -> timeSheet.getEmployee().getId(),
+          List::of,
+          (timeSheets1, timeSheets2) -> {
+            List<TimeSheet> tempList = new ArrayList<>();
+            tempList.addAll(timeSheets1);
+            tempList.addAll(timeSheets2);
+            return tempList;
+          }
+        )
+      );
+  }
+
+  private void setHoursForEmployee(Employee hiredEmployee, TimeSheetDto timeSheetDto, Map<Integer, List<TimeSheet>> map) {
+    List<TimeSheet> timeSheets = map.getOrDefault(hiredEmployee.getId(), new ArrayList<>());
+    for (TimeSheet sheet : timeSheets) {
+      Integer hours = sheet.getHours();
+      long between = ChronoUnit.DAYS.between(sheet.getDate(), LocalDate.now());
+      if (between == 0) {
+        timeSheetDto.setHoursDay5(hours);
+      } else if (between == 1) {
+        timeSheetDto.setHoursDay4(hours);
+      } else if (between == 2) {
+        timeSheetDto.setHoursDay3(hours);
+      } else if (between == 3) {
+        timeSheetDto.setHoursDay2(hours);
+      } else if (between == 4) {
+        timeSheetDto.setHoursDay1(hours);
       }
     }
   }
 
   public TimeSheetDto save(TimeSheetDto timeSheetDto) {
-    System.out.println("Сохранили");
     return timeSheetDto;
   }
 }
