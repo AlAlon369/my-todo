@@ -33,8 +33,7 @@ public class TimeSheetController {
     List<TimeSheetDto> list = new ArrayList<>();
     for (Employee hiredEmployee : hiredEmployees) {
       TimeSheetDto timeSheetDto = new TimeSheetDto();
-      timeSheetDto.setFio(hiredEmployee.getFirstName() + " " + hiredEmployee.getLastName());
-      timeSheetDto.setEmployeeId(hiredEmployee.getId());
+      timeSheetDto.setEmployee(hiredEmployee);
       setHoursForEmployee(hiredEmployee, timeSheetDto, map);
       list.add(timeSheetDto);
     }
@@ -61,38 +60,27 @@ public class TimeSheetController {
   private void setHoursForEmployee(Employee hiredEmployee, TimeSheetDto timeSheetDto, Map<Integer, List<TimeSheet>> map) {
     List<TimeSheet> timeSheets = map.getOrDefault(hiredEmployee.getId(), new ArrayList<>());
     for (TimeSheet sheet : timeSheets) {
-      Integer hours = sheet.getHours();
       long between = ChronoUnit.DAYS.between(sheet.getDate(), LocalDate.now());
       if (between == 0) {
-        timeSheetDto.setHoursDay5(hours);
+        timeSheetDto.setTimeSheetDay5(sheet);
       } else if (between == 1) {
-        timeSheetDto.setHoursDay4(hours);
+        timeSheetDto.setTimeSheetDay4(sheet);
       } else if (between == 2) {
-        timeSheetDto.setHoursDay3(hours);
+        timeSheetDto.setTimeSheetDay3(sheet);
       } else if (between == 3) {
-        timeSheetDto.setHoursDay2(hours);
+        timeSheetDto.setTimeSheetDay2(sheet);
       } else if (between == 4) {
-        timeSheetDto.setHoursDay1(hours);
+        timeSheetDto.setTimeSheetDay1(sheet);
       }
     }
   }
 
   public TimeSheetDto save(TimeSheetDto timeSheetDto) {
-    int employeeId = timeSheetDto.getEmployeeId();
-    Employee employee = employeeRepository.findById(employeeId).orElseThrow();
-    int hoursDay1 = timeSheetDto.getHoursDay1();
-    int hoursDay2 = timeSheetDto.getHoursDay2();
-    int hoursDay3 = timeSheetDto.getHoursDay3();
-    int hoursDay4 = timeSheetDto.getHoursDay4();
-    int hoursDay5 = timeSheetDto.getHoursDay5();
-    List<Integer> listOfHours = List.of(hoursDay5, hoursDay4, hoursDay3, hoursDay2, hoursDay1);
-    for (int day = 4; day >= 0; day--) {
-      TimeSheet timeSheet = new TimeSheet();
-      timeSheet.setEmployee(employee);
-      timeSheet.setHours(listOfHours.get(day));
-      timeSheet.setDate(LocalDate.now().minusDays(day));
-      timeSheetRepository.save(timeSheet);
-    }
+    timeSheetRepository.save(timeSheetDto.getTimeSheetDay1());
+    timeSheetRepository.save(timeSheetDto.getTimeSheetDay2());
+    timeSheetRepository.save(timeSheetDto.getTimeSheetDay3());
+    timeSheetRepository.save(timeSheetDto.getTimeSheetDay4());
+    timeSheetRepository.save(timeSheetDto.getTimeSheetDay5());
     return timeSheetDto;
   }
 }

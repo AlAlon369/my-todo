@@ -1,68 +1,62 @@
 package com.example.application.data;
 
 
+import com.example.application.data.entity.Employee;
+import com.example.application.data.entity.TimeSheet;
+
 public class TimeSheetDto {
-  private String fio;
-  private int employeeId;
-  private int hoursDay1;
-  private int hoursDay2;
-  private int hoursDay3;
-  private int hoursDay4;
-  private int hoursDay5;
+  private Employee employee;
+  private TimeSheet timeSheetDay1;
+  private TimeSheet timeSheetDay2;
+  private TimeSheet timeSheetDay3;
+  private TimeSheet timeSheetDay4;
+  private TimeSheet timeSheetDay5;
 
-  public String getFio() {
-    return fio;
+  public Employee getEmployee() {
+    return employee;
   }
 
-  public void setFio(String fio) {
-    this.fio = fio;
+  public void setEmployee(Employee employee) {
+    this.employee = employee;
   }
 
-  public int getHoursDay1() {
-    return hoursDay1;
+  public TimeSheet getTimeSheetDay1() {
+    return timeSheetDay1;
   }
 
-  public void setHoursDay1(int hoursDay1) {
-    this.hoursDay1 = hoursDay1;
+  public void setTimeSheetDay1(TimeSheet timeSheetDay1) {
+    this.timeSheetDay1 = timeSheetDay1;
   }
 
-  public int getHoursDay2() {
-    return hoursDay2;
+  public TimeSheet getTimeSheetDay2() {
+    return timeSheetDay2;
   }
 
-  public void setHoursDay2(int hoursDay2) {
-    this.hoursDay2 = hoursDay2;
+  public void setTimeSheetDay2(TimeSheet timeSheetDay2) {
+    this.timeSheetDay2 = timeSheetDay2;
   }
 
-  public int getHoursDay3() {
-    return hoursDay3;
+  public TimeSheet getTimeSheetDay3() {
+    return timeSheetDay3;
   }
 
-  public void setHoursDay3(int hoursDay3) {
-    this.hoursDay3 = hoursDay3;
+  public void setTimeSheetDay3(TimeSheet timeSheetDay3) {
+    this.timeSheetDay3 = timeSheetDay3;
   }
 
-  public int getHoursDay4() {
-    return hoursDay4;
+  public TimeSheet getTimeSheetDay4() {
+    return timeSheetDay4;
   }
 
-  public void setHoursDay4(int hoursDay4) {
-    this.hoursDay4 = hoursDay4;
+  public void setTimeSheetDay4(TimeSheet timeSheetDay4) {
+    this.timeSheetDay4 = timeSheetDay4;
   }
 
-  public int getHoursDay5() {
-    return hoursDay5;
+  public TimeSheet getTimeSheetDay5() {
+    return timeSheetDay5;
   }
 
-  public void setHoursDay5(int hoursDay5) {
-    this.hoursDay5 = hoursDay5;
-  }
-
-  public int getEmployeeId() {
-    return employeeId;
-  }
-
-  public void setEmployeeId(int employeeId) {
-    this.employeeId = employeeId;
+  public void setTimeSheetDay5(TimeSheet timeSheetDay5) {
+    this.timeSheetDay5 = timeSheetDay5;
   }
 }
