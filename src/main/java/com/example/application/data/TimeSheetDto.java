@@ -3,6 +3,7 @@ package com.example.application.data;
 
 public class TimeSheetDto {
   private String fio;
+  private int employeeId;
   private int hoursDay1;
   private int hoursDay2;
   private int hoursDay3;
@@ -55,5 +56,13 @@ public class TimeSheetDto {
 
   public void setHoursDay5(int hoursDay5) {
     this.hoursDay5 = hoursDay5;
+  }
+
+  public int getEmployeeId() {
+    return employeeId;
+  }
+
+  public void setEmployeeId(int employeeId) {
+    this.employeeId = employeeId;
   }
 }

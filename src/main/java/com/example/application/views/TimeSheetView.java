@@ -22,8 +22,8 @@ public class TimeSheetView extends FormLayout {
   public TimeSheetView(TimeSheetController controller) {
     GridCrud<TimeSheetDto> crud = new GridCrud<>(TimeSheetDto.class, new VerticalCrudLayout());
     crud.setFindAllOperation(controller::findAll);
-    crud.setAddOperation(controller::save);
-    crud.setUpdateOperation(controller::save);
+    // crud.setAddOperation(controller::save);
+     crud.setUpdateOperation(controller::save);
 
     translateForms(crud);
     setColumns(crud);

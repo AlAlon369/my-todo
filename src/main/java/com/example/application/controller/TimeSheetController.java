@@ -34,6 +34,7 @@ public class TimeSheetController {
     for (Employee hiredEmployee : hiredEmployees) {
       TimeSheetDto timeSheetDto = new TimeSheetDto();
       timeSheetDto.setFio(hiredEmployee.getFirstName() + " " + hiredEmployee.getLastName());
+      timeSheetDto.setEmployeeId(hiredEmployee.getId());
       setHoursForEmployee(hiredEmployee, timeSheetDto, map);
       list.add(timeSheetDto);
     }
@@ -77,6 +78,21 @@ public class TimeSheetController {
   }
 
   public TimeSheetDto save(TimeSheetDto timeSheetDto) {
+    int employeeId = timeSheetDto.getEmployeeId();
+    Employee employee = employeeRepository.findById(employeeId).orElseThrow();
+    int hoursDay1 = timeSheetDto.getHoursDay1();
+    int hoursDay2 = timeSheetDto.getHoursDay2();
+    int hoursDay3 = timeSheetDto.getHoursDay3();
+    int hoursDay4 = timeSheetDto.getHoursDay4();
+    int hoursDay5 = timeSheetDto.getHoursDay5();
+    List<Integer> listOfHours = List.of(hoursDay5, hoursDay4, hoursDay3, hoursDay2, hoursDay1);
+    for (int day = 4; day >= 0; day--) {
+      TimeSheet timeSheet = new TimeSheet();
+      timeSheet.setEmployee(employee);
+      timeSheet.setHours(listOfHours.get(day));
+      timeSheet.setDate(LocalDate.now().minusDays(day));
+      timeSheetRepository.save(timeSheet);
+    }
     return timeSheetDto;
   }
 }
