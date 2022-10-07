@@ -42,7 +42,6 @@ public class TimeSheetController {
   }
 
   private Map<Integer, List<TimeSheet>> collectTimeSheets(List<TimeSheet> allTimeSheets) {
-    // Дай мне List по id (Integer), например по id 9
     return allTimeSheets.stream()
       .collect(Collectors.toMap(
           timeSheet -> timeSheet.getEmployee().getId(),
@@ -73,14 +72,5 @@ public class TimeSheetController {
         timeSheetDto.setTimeSheetDay1(sheet);
       }
     }
-  }
-
-  public TimeSheetDto save(TimeSheetDto timeSheetDto) {
-    timeSheetRepository.save(timeSheetDto.getTimeSheetDay1());
-    timeSheetRepository.save(timeSheetDto.getTimeSheetDay2());
-    timeSheetRepository.save(timeSheetDto.getTimeSheetDay3());
-    timeSheetRepository.save(timeSheetDto.getTimeSheetDay4());
-    timeSheetRepository.save(timeSheetDto.getTimeSheetDay5());
-    return timeSheetDto;
   }
 }
