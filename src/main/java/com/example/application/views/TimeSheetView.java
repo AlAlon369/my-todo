@@ -1,32 +1,63 @@
 package com.example.application.views;
 
-import com.example.application.controller.TimeSheetController;
-import com.example.application.data.TimeSheetDto;
-import com.example.application.data.entity.Employee;
-import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.Route;
-
-import org.vaadin.crudui.crud.impl.GridCrud;
-import org.vaadin.crudui.layout.impl.VerticalCrudLayout;
-
-import javax.annotation.security.RolesAllowed;
+import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.BASELINE;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.annotation.security.RolesAllowed;
+
+import org.vaadin.crudui.crud.impl.GridCrud;
+import org.vaadin.crudui.layout.impl.VerticalCrudLayout;
+
+import com.example.application.controller.TimeSheetController;
+import com.example.application.data.TimeSheetDto;
+import com.example.application.data.entity.Employee;
+import com.example.application.data.entity.TimeSheet;
+import com.example.application.data.repository.TimeSheetRepository;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.Route;
+
 @Route(value = "timesheet", layout = AppLayoutBasic.class)
 @RolesAllowed("USER")
 public class TimeSheetView extends FormLayout {
-  public TimeSheetView(TimeSheetController controller) {
+  public TimeSheetView(TimeSheetController controller, TimeSheetRepository repository) {
     ComboBox<Employee> employeeComboBox = createEmployeeComboBox(controller);
+    DatePicker datePicker = new DatePicker("Дата выхода");
+    TextField hours = new TextField("Часы");
+    Button button = createSaveButton(repository, employeeComboBox, datePicker, hours);
+    HorizontalLayout horizontalLayout = new HorizontalLayout(employeeComboBox, datePicker, hours, button);
+    horizontalLayout.setAlignItems(BASELINE);
     GridCrud<TimeSheetDto> crud = createTimeSheetGrid(controller);
-    VerticalLayout layout = new VerticalLayout(employeeComboBox, crud);
+    VerticalLayout layout = new VerticalLayout(horizontalLayout, crud);
     add(layout);
+  }
+
+  private static Button createSaveButton(TimeSheetRepository repository,
+                                         ComboBox<Employee> employeeComboBox,
+                                         DatePicker datePicker,
+                                         TextField textField) {
+    Button button = new Button("Сохранить");
+    button.addClickListener(clickEvent -> {
+      Employee employee = employeeComboBox.getValue();
+      String value = textField.getValue();
+      LocalDate date = datePicker.getValue();
+      TimeSheet timeSheet = new TimeSheet();
+      timeSheet.setEmployee(employee);
+      timeSheet.setHours(Integer.valueOf(value));
+      timeSheet.setDate(date);
+      repository.save(timeSheet);
+    });
+    return button;
   }
 
   private ComboBox<Employee> createEmployeeComboBox(TimeSheetController controller) {
