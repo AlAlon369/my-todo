@@ -77,8 +77,9 @@ public class TimeSheetView extends FormLayout {
         ComboBox.ItemFilter<Technology> filter = (technology, filterString) ->
                 (technology.getTitle().toLowerCase()).contains(filterString.toLowerCase());
         List<Technology> technologyList = controller.findAllTechnology();
-        comboBox.setItems(filter, technologyList);
         comboBox.setItemLabelGenerator(Technology::getTitle);
+        comboBox.setItems(filter, technologyList);
+        comboBox.setValue(technologyList.get(0)); // TODO: 09.10.2022 Здесь нужно будет поставить технологию по умолчанию
         return comboBox;
     }
 
