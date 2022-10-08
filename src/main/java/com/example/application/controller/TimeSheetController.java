@@ -41,6 +41,10 @@ public class TimeSheetController {
     return list;
   }
 
+  public void save(TimeSheet timeSheet) {
+    timeSheetRepository.save(timeSheet);
+  }
+
   private Map<Integer, List<TimeSheet>> collectTimeSheets(List<TimeSheet> allTimeSheets) {
     return allTimeSheets.stream()
       .collect(Collectors.toMap(

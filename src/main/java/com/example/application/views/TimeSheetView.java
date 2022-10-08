@@ -16,7 +16,6 @@ import com.example.application.controller.TimeSheetController;
 import com.example.application.data.TimeSheetDto;
 import com.example.application.data.entity.Employee;
 import com.example.application.data.entity.TimeSheet;
-import com.example.application.data.repository.TimeSheetRepository;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -30,20 +29,26 @@ import com.vaadin.flow.router.Route;
 @Route(value = "timesheet", layout = AppLayoutBasic.class)
 @RolesAllowed("USER")
 public class TimeSheetView extends FormLayout {
-  public TimeSheetView(TimeSheetController controller, TimeSheetRepository repository) {
-    ComboBox<Employee> employeeComboBox = createEmployeeComboBox(controller);
-    DatePicker datePicker = new DatePicker("Дата выхода");
-    TextField hours = new TextField("Часы");
-    GridCrud<TimeSheetDto> grid = createTimeSheetGrid(controller);
-    Button button = createSaveButton(repository, employeeComboBox, datePicker, hours, grid);
-    HorizontalLayout horizontalLayout = new HorizontalLayout(employeeComboBox, datePicker, hours, button);
-    horizontalLayout.setAlignItems(BASELINE);
-    VerticalLayout layout = new VerticalLayout(horizontalLayout, grid);
-    add(layout);
+  private final transient TimeSheetController controller;
+  public TimeSheetView(TimeSheetController controller) {
+    this.controller = controller;
+    GridCrud<TimeSheetDto> grid = createTimeSheetGrid();
+    HorizontalLayout timesheetSaveLayout = createTimesheetSaveLayout(grid);
+    VerticalLayout mainLayout = new VerticalLayout(timesheetSaveLayout, grid);
+    add(mainLayout);
   }
 
-  private Button createSaveButton(TimeSheetRepository repository,
-                                  ComboBox<Employee> employeeComboBox,
+  private HorizontalLayout createTimesheetSaveLayout(GridCrud<TimeSheetDto> grid) {
+    ComboBox<Employee> employeeComboBox = createEmployeeComboBox();
+    DatePicker datePicker = new DatePicker("Дата выхода");
+    TextField hours = new TextField("Часы");
+    Button button = createSaveButton(employeeComboBox, datePicker, hours, grid);
+    HorizontalLayout timesheetSaveLayout = new HorizontalLayout(employeeComboBox, datePicker, hours, button);
+    timesheetSaveLayout.setAlignItems(BASELINE);
+    return timesheetSaveLayout;
+  }
+
+  private Button createSaveButton(ComboBox<Employee> employeeComboBox,
                                   DatePicker datePicker,
                                   TextField textField,
                                   GridCrud<TimeSheetDto> grid) {
@@ -56,13 +61,13 @@ public class TimeSheetView extends FormLayout {
       timeSheet.setEmployee(employee);
       timeSheet.setHours(Integer.valueOf(value));
       timeSheet.setDate(date);
-      repository.save(timeSheet);
+      controller.save(timeSheet);
       grid.refreshGrid();
     });
     return button;
   }
 
-  private ComboBox<Employee> createEmployeeComboBox(TimeSheetController controller) {
+  private ComboBox<Employee> createEmployeeComboBox() {
     ComboBox<Employee> comboBox = new ComboBox<>("Сотрудник");
     comboBox.getStyle().set("--vaadin-combo-box-overlay-width", "350px");
     ComboBox.ItemFilter<Employee> filter = (person, filterString) ->
@@ -76,7 +81,7 @@ public class TimeSheetView extends FormLayout {
     return comboBox;
   }
 
-  private GridCrud<TimeSheetDto> createTimeSheetGrid(TimeSheetController controller) {
+  private GridCrud<TimeSheetDto> createTimeSheetGrid() {
     GridCrud<TimeSheetDto> crud = new GridCrud<>(TimeSheetDto.class, new VerticalCrudLayout());
     setButtonsInvisible(crud);
     crud.setFindAllOperation(controller::findAll);
