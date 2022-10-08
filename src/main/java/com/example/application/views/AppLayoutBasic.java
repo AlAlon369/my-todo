@@ -36,8 +36,9 @@ public class AppLayoutBasic extends AppLayout {
     private Tabs getTabs() {
         Tabs tabs = new Tabs();
         tabs.add(
-                createTab(VaadinIcon.DASHBOARD, "Сотрудники", EmployeesView.class),
-                createTab(VaadinIcon.DASHBOARD, "Табель учёта", TimeSheetView.class)
+                createTab(VaadinIcon.SPECIALIST, "Сотрудники", EmployeesView.class),
+                createTab(VaadinIcon.HOURGLASS, "Табель учёта", TimeSheetView.class),
+                createTab(VaadinIcon.FLASK, "Технологии", TechnologyView.class)
         );
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         return tabs;
