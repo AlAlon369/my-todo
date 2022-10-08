@@ -96,16 +96,17 @@ public class TimeSheetView extends FormLayout {
     DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM");
     Grid<TimeSheetDto> grid = crud.getGrid();
     grid.removeAllColumns();
-    grid.addColumn(sheet -> sheet.getEmployee().getLastName() + " " + sheet.getEmployee().getFirstName()).setHeader("Сотрудник");
+    grid.addColumn(sheet -> sheet.getEmployee().getLastName() + " " + sheet.getEmployee().getFirstName())
+      .setAutoWidth(true).setHeader("Сотрудник");
     grid.addColumn(sheet -> sheet.getTimeSheetDay1() == null ? 0 : sheet.getTimeSheetDay1().getHours())
-      .setHeader(today.minusDays(4).format(dateFormatter));
+      .setHeader(today.minusDays(4).format(dateFormatter)).setAutoWidth(true);
     grid.addColumn(sheet -> sheet.getTimeSheetDay2() == null ? 0 : sheet.getTimeSheetDay2().getHours())
-      .setHeader(today.minusDays(3).format(dateFormatter));
+      .setHeader(today.minusDays(3).format(dateFormatter)).setAutoWidth(true);
     grid.addColumn(sheet -> sheet.getTimeSheetDay3() == null ? 0 : sheet.getTimeSheetDay3().getHours())
-      .setHeader(today.minusDays(2).format(dateFormatter));
+      .setHeader(today.minusDays(2).format(dateFormatter)).setAutoWidth(true);
     grid.addColumn(sheet -> sheet.getTimeSheetDay4() == null ? 0 : sheet.getTimeSheetDay4().getHours())
-      .setHeader(today.minusDays(1).format(dateFormatter));
+      .setHeader(today.minusDays(1).format(dateFormatter)).setAutoWidth(true);
     grid.addColumn(sheet -> sheet.getTimeSheetDay5() == null ? 0 : sheet.getTimeSheetDay5().getHours())
-      .setHeader(today.minusDays(0).format(dateFormatter));
+      .setHeader(today.minusDays(0).format(dateFormatter)).setAutoWidth(true);
   }
 }
