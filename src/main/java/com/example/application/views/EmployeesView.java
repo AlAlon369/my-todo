@@ -33,10 +33,9 @@ public class EmployeesView extends FormLayout {
 
     private void translateForms(GridCrud<Employee> crud) {
         CrudFormFactory<Employee> crudFormFactory = crud.getCrudFormFactory();
-        crudFormFactory.setVisibleProperties("firstName", "lastName", "middleName", "phone", "hired");
+        crudFormFactory.setVisibleProperties("firstName", "lastName", "phone", "hired");
         crudFormFactory.setFieldCreationListener("firstName", field -> ((TextField) field).setLabel("Имя"));
         crudFormFactory.setFieldCreationListener("lastName", field -> ((TextField) field).setLabel("Фамилия"));
-        crudFormFactory.setFieldCreationListener("middleName", field -> ((TextField) field).setLabel("Отчество"));
         crudFormFactory.setFieldCreationListener("phone", field -> ((TextField) field).setLabel("Телефон"));
         crudFormFactory.setFieldCreationListener("hired", field -> ((Checkbox) field).setLabel("Нанят"));
     }
@@ -45,11 +44,10 @@ public class EmployeesView extends FormLayout {
         Grid<Employee> grid = crud.getGrid();
         grid.getColumnByKey("firstName").setHeader("Имя");
         grid.getColumnByKey("lastName").setHeader("Фамилия");
-        grid.getColumnByKey("middleName").setHeader("Отчество");
         grid.getColumnByKey("phone").setHeader("Телефон");
         grid.getColumnByKey("hired").setVisible(false);
         grid.getColumnByKey("id").setVisible(false);
-        grid.addColumn(employee -> employee.getHired() ? "Да" : "Нет").setHeader("Нанят");
+        grid.addColumn(employee -> Boolean.TRUE.equals(employee.getHired()) ? "Да" : "Нет").setHeader("Нанят");
     }
 }
 

@@ -13,7 +13,6 @@ public class Employee {
     private Integer id;
     private String firstName;
     private String lastName;
-    private String middleName;
     private String phone;
     private boolean hired;
 
@@ -39,14 +38,6 @@ public class Employee {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public void setMiddleName(String midname) {
-        this.middleName = midname;
     }
 
     public String getPhone() {
