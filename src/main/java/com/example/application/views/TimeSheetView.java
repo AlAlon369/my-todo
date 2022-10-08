@@ -34,18 +34,19 @@ public class TimeSheetView extends FormLayout {
     ComboBox<Employee> employeeComboBox = createEmployeeComboBox(controller);
     DatePicker datePicker = new DatePicker("Дата выхода");
     TextField hours = new TextField("Часы");
-    Button button = createSaveButton(repository, employeeComboBox, datePicker, hours);
+    GridCrud<TimeSheetDto> grid = createTimeSheetGrid(controller);
+    Button button = createSaveButton(repository, employeeComboBox, datePicker, hours, grid);
     HorizontalLayout horizontalLayout = new HorizontalLayout(employeeComboBox, datePicker, hours, button);
     horizontalLayout.setAlignItems(BASELINE);
-    GridCrud<TimeSheetDto> crud = createTimeSheetGrid(controller);
-    VerticalLayout layout = new VerticalLayout(horizontalLayout, crud);
+    VerticalLayout layout = new VerticalLayout(horizontalLayout, grid);
     add(layout);
   }
 
-  private static Button createSaveButton(TimeSheetRepository repository,
-                                         ComboBox<Employee> employeeComboBox,
-                                         DatePicker datePicker,
-                                         TextField textField) {
+  private Button createSaveButton(TimeSheetRepository repository,
+                                  ComboBox<Employee> employeeComboBox,
+                                  DatePicker datePicker,
+                                  TextField textField,
+                                  GridCrud<TimeSheetDto> grid) {
     Button button = new Button("Сохранить");
     button.addClickListener(clickEvent -> {
       Employee employee = employeeComboBox.getValue();
@@ -56,6 +57,7 @@ public class TimeSheetView extends FormLayout {
       timeSheet.setHours(Integer.valueOf(value));
       timeSheet.setDate(date);
       repository.save(timeSheet);
+      grid.refreshGrid();
     });
     return button;
   }
