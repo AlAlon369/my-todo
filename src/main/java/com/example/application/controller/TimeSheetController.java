@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.example.application.data.entity.Technology;
+import com.example.application.data.repository.TechnologyRepository;
 import org.springframework.stereotype.Component;
 
 import com.example.application.data.TimeSheetDto;
@@ -19,11 +21,18 @@ import com.example.application.data.repository.TimeSheetRepository;
 public class TimeSheetController {
   private final EmployeeRepository employeeRepository;
   private final TimeSheetRepository timeSheetRepository;
+  private final TechnologyRepository technologyRepository;
 
   public TimeSheetController(EmployeeRepository employeeRepository,
-                             TimeSheetRepository timeSheetRepository) {
+                             TimeSheetRepository timeSheetRepository,
+                             TechnologyRepository technologyRepository) {
     this.employeeRepository = employeeRepository;
     this.timeSheetRepository = timeSheetRepository;
+    this.technologyRepository = technologyRepository;
+  }
+
+  public List<Technology> findAllTechnology() {
+    return technologyRepository.findAll();
   }
 
   public List<TimeSheetDto> findAll() {
