@@ -35,9 +35,9 @@ public class TimeSheetController {
     return productRepository.findAll();
   }
 
-  public List<TimeSheetDto> findAll() {
+  public List<TimeSheetDto> findAll(Product product) {
     List<Employee> hiredEmployees = employeeRepository.findByHiredTrue();
-    List<TimeSheet> allTimeSheets = timeSheetRepository.findByDateAfter(LocalDate.now().minusDays(5));
+    List<TimeSheet> allTimeSheets = timeSheetRepository.findByDateAfterAndProductEquals(LocalDate.now().minusDays(5), product);
     Map<Integer, List<TimeSheet>> map = collectTimeSheets(allTimeSheets);
     List<TimeSheetDto> list = new ArrayList<>();
     for (Employee hiredEmployee : hiredEmployees) {
@@ -85,5 +85,9 @@ public class TimeSheetController {
         timeSheetDto.setTimeSheetDay1(sheet);
       }
     }
+  }
+
+  public List<Employee> findAllHiredEmployees() {
+    return employeeRepository.findByHiredTrue();
   }
 }

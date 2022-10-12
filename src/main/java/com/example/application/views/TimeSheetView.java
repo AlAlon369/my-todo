@@ -5,7 +5,6 @@ import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.BA
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.annotation.security.RolesAllowed;
 
@@ -31,22 +30,23 @@ import com.vaadin.flow.router.Route;
 @RolesAllowed("USER")
 public class TimeSheetView extends FormLayout {
     private final transient TimeSheetController controller;
+    private final GridCrud<TimeSheetDto> gridCrud = new GridCrud<>(TimeSheetDto.class, new VerticalCrudLayout());
+    private final ComboBox<Product> productComboBox = new ComboBox<>("Продукты");
 
     public TimeSheetView(TimeSheetController controller) {        // инжектировал контроллер в конструктор таймшитвью
         this.controller = controller;
-
-        ComboBox<Product> productComboBox = createProductComboBox();
-        GridCrud<TimeSheetDto> grid = createTimeSheetGrid();
-        HorizontalLayout timesheetSaveLayout = createTimesheetSaveLayout(grid);
-        VerticalLayout mainLayout = new VerticalLayout(productComboBox, timesheetSaveLayout, grid);
+        tuneProductComboBox();
+        tuneTimeSheetGrid();
+        HorizontalLayout timesheetSaveLayout = createTimesheetSaveLayout();
+        VerticalLayout mainLayout = new VerticalLayout(productComboBox, timesheetSaveLayout, gridCrud);
         add(mainLayout);
     }
 
-    private HorizontalLayout createTimesheetSaveLayout(GridCrud<TimeSheetDto> grid) {
+    private HorizontalLayout createTimesheetSaveLayout() {
         ComboBox<Employee> employeeComboBox = createEmployeeComboBox();
         DatePicker datePicker = new DatePicker("Дата выхода");
         TextField hours = new TextField("Часы");
-        Button button = createSaveButton(employeeComboBox, datePicker, hours, grid);
+        Button button = createSaveButton(employeeComboBox, datePicker, hours);
         HorizontalLayout timesheetSaveLayout = new HorizontalLayout(employeeComboBox, datePicker, hours, button);
         timesheetSaveLayout.setAlignItems(BASELINE);
         return timesheetSaveLayout;
@@ -54,8 +54,7 @@ public class TimeSheetView extends FormLayout {
 
     private Button createSaveButton(ComboBox<Employee> employeeComboBox,
                                     DatePicker datePicker,
-                                    TextField textField,
-                                    GridCrud<TimeSheetDto> grid) {
+                                    TextField textField) {
         Button button = new Button("Сохранить");
         button.addClickListener(clickEvent -> {
             Employee employee = employeeComboBox.getValue();
@@ -65,22 +64,21 @@ public class TimeSheetView extends FormLayout {
             timeSheet.setEmployee(employee);
             timeSheet.setHours(Integer.valueOf(value));
             timeSheet.setDate(date);
+            timeSheet.setProduct(productComboBox.getValue());
             controller.save(timeSheet);
-            grid.refreshGrid();
+            gridCrud.refreshGrid();
         });
         return button;
     }
 
-    private ComboBox<Product> createProductComboBox() {
-        ComboBox<Product> comboBox = new ComboBox<>("Технологии");
-        comboBox.getStyle().set("--vaadin-combo-box-overlay-width", "350px");
+    private void tuneProductComboBox() {
+        productComboBox.getStyle().set("--vaadin-combo-box-overlay-width", "350px");
         ComboBox.ItemFilter<Product> filter = (product, filterString) ->
                 (product.getTitle().toLowerCase()).contains(filterString.toLowerCase());
         List<Product> productList = controller.findAllProducts();
-        comboBox.setItemLabelGenerator(Product::getTitle);
-        comboBox.setItems(filter, productList);
-        comboBox.setValue(productList.get(0)); // TODO: 09.10.2022 Здесь нужно будет поставить технологию по умолчанию
-        return comboBox;
+        productComboBox.setItemLabelGenerator(Product::getTitle);
+        productComboBox.setItems(filter, productList);
+        productComboBox.addValueChangeListener(event -> gridCrud.refreshGrid());
     }
 
     private ComboBox<Employee> createEmployeeComboBox() {
@@ -88,34 +86,29 @@ public class TimeSheetView extends FormLayout {
         comboBox.getStyle().set("--vaadin-combo-box-overlay-width", "350px");
         ComboBox.ItemFilter<Employee> filter = (person, filterString) ->
                 (person.getLastName() + " " + person.getFirstName()).toLowerCase().contains(filterString.toLowerCase());
-        List<Employee> employees = controller.findAll()
-                .stream()
-                .map(TimeSheetDto::getEmployee)
-                .collect(Collectors.toList());
+        List<Employee> employees = controller.findAllHiredEmployees();
         comboBox.setItems(filter, employees);
         comboBox.setItemLabelGenerator(person -> person.getLastName() + " " + person.getFirstName());
         return comboBox;
     }
 
-    private GridCrud<TimeSheetDto> createTimeSheetGrid() {
-        GridCrud<TimeSheetDto> crud = new GridCrud<>(TimeSheetDto.class, new VerticalCrudLayout());
-        setButtonsInvisible(crud);
-        crud.setFindAllOperation(controller::findAll);
-        setColumns(crud);
-        return crud;
+    private void tuneTimeSheetGrid() {
+        setButtonsInvisible();
+        gridCrud.setFindAllOperation(() -> controller.findAll(productComboBox.getValue()));
+        setColumns();
     }
 
-    private void setButtonsInvisible(GridCrud<TimeSheetDto> crud) {
-        crud.setAddOperationVisible(false);
-        crud.setDeleteOperationVisible(false);
-        crud.setUpdateOperationVisible(false);
-        crud.setFindAllOperationVisible(false);
+    private void setButtonsInvisible() {
+        gridCrud.setAddOperationVisible(false);
+        gridCrud.setDeleteOperationVisible(false);
+        gridCrud.setUpdateOperationVisible(false);
+        gridCrud.setFindAllOperationVisible(false);
     }
 
-    private void setColumns(GridCrud<TimeSheetDto> crud) {
+    private void setColumns() {
         LocalDate today = LocalDate.now();
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM");
-        Grid<TimeSheetDto> grid = crud.getGrid();
+        Grid<TimeSheetDto> grid = gridCrud.getGrid();
         grid.removeAllColumns();
         grid.addColumn(sheet -> sheet.getEmployee().getLastName() + " " + sheet.getEmployee().getFirstName())
                 .setAutoWidth(true).setHeader("Сотрудник");

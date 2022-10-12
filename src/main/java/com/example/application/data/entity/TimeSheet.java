@@ -14,6 +14,10 @@ public class TimeSheet {
     @JoinColumn(name="employee_id", nullable=false)
     private Employee employee;
 
+    @OneToOne
+    @JoinColumn(name="product_id", nullable=false)
+    private Product product;
+
     public Integer getId() {
         return id;
     }
@@ -44,5 +48,13 @@ public class TimeSheet {
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }
