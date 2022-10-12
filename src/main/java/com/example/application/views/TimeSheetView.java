@@ -60,6 +60,10 @@ public class TimeSheetView extends FormLayout {
             Employee employee = employeeComboBox.getValue();
             String value = textField.getValue();
             LocalDate date = datePicker.getValue();
+            LocalDate now = LocalDate.now();
+            if (date.isAfter(now) || date.isBefore(now.minusDays(4))){
+                return;
+            }
             TimeSheet timeSheet = new TimeSheet();
             timeSheet.setEmployee(employee);
             timeSheet.setHours(Integer.valueOf(value));
