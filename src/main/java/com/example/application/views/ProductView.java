@@ -1,7 +1,7 @@
 package com.example.application.views;
 
-import com.example.application.data.entity.Technology;
-import com.example.application.data.repository.TechnologyRepository;
+import com.example.application.data.entity.Product;
+import com.example.application.data.repository.ProductRepository;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.textfield.TextField;
@@ -11,21 +11,21 @@ import org.vaadin.crudui.form.CrudFormFactory;
 
 import javax.annotation.security.RolesAllowed;
 
-@Route(value = "technology", layout = AppLayoutBasic.class)
+@Route(value = "product", layout = AppLayoutBasic.class)
 @RolesAllowed("USER")
-public class TechnologyView extends FormLayout {
-    public TechnologyView(TechnologyRepository repository) {
-        GridCrud<Technology> crud = new GridCrud<>(Technology.class);
+public class ProductView extends FormLayout {
+    public ProductView(ProductRepository repository) {
+        GridCrud<Product> crud = new GridCrud<>(Product.class);
         crud.setFindAllOperation(repository::findAll);
         crud.setAddOperation(repository::save);
         crud.setUpdateOperation(repository::save);
         crud.setDeleteOperation(repository::delete);
 
-        Grid<Technology> grid = crud.getGrid();
+        Grid<Product> grid = crud.getGrid();
         grid.getColumnByKey("title").setHeader("Название");
         grid.removeColumnByKey("id");
 
-        CrudFormFactory<Technology> crudFormFactory = crud.getCrudFormFactory();
+        CrudFormFactory<Product> crudFormFactory = crud.getCrudFormFactory();
         crudFormFactory.setVisibleProperties("title");
         crudFormFactory.setFieldCreationListener("title", field -> ((TextField) field).setLabel("Название"));
 

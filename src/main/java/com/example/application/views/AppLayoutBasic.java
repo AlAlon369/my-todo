@@ -38,7 +38,7 @@ public class AppLayoutBasic extends AppLayout {
         tabs.add(
                 createTab(VaadinIcon.SPECIALIST, "Сотрудники", EmployeesView.class),
                 createTab(VaadinIcon.HOURGLASS, "Табель учёта", TimeSheetView.class),
-                createTab(VaadinIcon.FLASK, "Технологии", TechnologyView.class)
+                createTab(VaadinIcon.FLASK, "Технологии", ProductView.class)
         );
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         return tabs;

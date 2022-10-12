@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.security.RolesAllowed;
 
-import com.example.application.data.entity.Technology;
+import com.example.application.data.entity.Product;
 import org.vaadin.crudui.crud.impl.GridCrud;
 import org.vaadin.crudui.layout.impl.VerticalCrudLayout;
 
@@ -35,10 +35,10 @@ public class TimeSheetView extends FormLayout {
     public TimeSheetView(TimeSheetController controller) {        // инжектировал контроллер в конструктор таймшитвью
         this.controller = controller;
 
-        ComboBox<Technology> technologyComboBox = createTechnologyComboBox();
+        ComboBox<Product> productComboBox = createProductComboBox();
         GridCrud<TimeSheetDto> grid = createTimeSheetGrid();
         HorizontalLayout timesheetSaveLayout = createTimesheetSaveLayout(grid);
-        VerticalLayout mainLayout = new VerticalLayout(technologyComboBox, timesheetSaveLayout, grid);
+        VerticalLayout mainLayout = new VerticalLayout(productComboBox, timesheetSaveLayout, grid);
         add(mainLayout);
     }
 
@@ -71,15 +71,15 @@ public class TimeSheetView extends FormLayout {
         return button;
     }
 
-    private ComboBox<Technology> createTechnologyComboBox() {
-        ComboBox<Technology> comboBox = new ComboBox<>("Технологии");
+    private ComboBox<Product> createProductComboBox() {
+        ComboBox<Product> comboBox = new ComboBox<>("Технологии");
         comboBox.getStyle().set("--vaadin-combo-box-overlay-width", "350px");
-        ComboBox.ItemFilter<Technology> filter = (technology, filterString) ->
-                (technology.getTitle().toLowerCase()).contains(filterString.toLowerCase());
-        List<Technology> technologyList = controller.findAllTechnology();
-        comboBox.setItemLabelGenerator(Technology::getTitle);
-        comboBox.setItems(filter, technologyList);
-        comboBox.setValue(technologyList.get(0)); // TODO: 09.10.2022 Здесь нужно будет поставить технологию по умолчанию
+        ComboBox.ItemFilter<Product> filter = (product, filterString) ->
+                (product.getTitle().toLowerCase()).contains(filterString.toLowerCase());
+        List<Product> productList = controller.findAllProducts();
+        comboBox.setItemLabelGenerator(Product::getTitle);
+        comboBox.setItems(filter, productList);
+        comboBox.setValue(productList.get(0)); // TODO: 09.10.2022 Здесь нужно будет поставить технологию по умолчанию
         return comboBox;
     }
 
