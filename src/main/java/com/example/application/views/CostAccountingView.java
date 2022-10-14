@@ -37,8 +37,8 @@ public class CostAccountingView extends FormLayout {
     private void setColumns(GridCrud<CostAccounting> crud) {
         Grid<CostAccounting> grid = crud.getGrid();
         grid.removeAllColumns();
-        crud.getGrid().addColumn(costAccounting -> costAccounting.getOutput().getProduct().getTitle()).setHeader("Продукт");
-        crud.getGrid().addColumn(costAccounting -> costAccounting.getOutput().getDate()).setHeader("Дата");
+        crud.getGrid().addColumn(costAccounting -> costAccounting.getOutput().getProduct().getTitle()).setHeader("Продукт").setSortable(true);
+        crud.getGrid().addColumn(costAccounting -> costAccounting.getOutput().getDate()).setHeader("Дата").setSortable(true);
         crud.getGrid().addColumn(costAccounting -> costAccounting.getCost().getName()).setHeader("Наименование расхода");
         crud.getGrid().addColumn(CostAccounting::getAmount).setHeader("Количество");
     }
