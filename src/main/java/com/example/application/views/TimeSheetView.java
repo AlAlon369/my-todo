@@ -5,18 +5,27 @@ import java.util.List;
 import javax.annotation.security.RolesAllowed;
 
 import org.vaadin.crudui.crud.impl.GridCrud;
+import org.vaadin.crudui.form.CrudFormFactory;
+import org.vaadin.crudui.form.impl.field.provider.ComboBoxProvider;
 
+import com.example.application.data.entity.Product;
 import com.example.application.data.entity.TimeSheet;
+import com.example.application.data.repository.EmployeeRepository;
+import com.example.application.data.repository.ProductRepository;
 import com.example.application.data.repository.TimeSheetRepository;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.data.renderer.TextRenderer;
 import com.vaadin.flow.router.Route;
 
 @Route(value = "timesheet", layout = AppLayoutBasic.class)
 @RolesAllowed("USER")
 public class TimeSheetView extends FormLayout {
 
-    public TimeSheetView(TimeSheetRepository repository) {
+    public TimeSheetView(TimeSheetRepository repository,
+                         ProductRepository productRepository,
+                         EmployeeRepository employeeRepository
+    ) {
         GridCrud<TimeSheet> gridCrud = new GridCrud<>(TimeSheet.class);
         gridCrud.setFindAllOperation(repository::findAll);
         gridCrud.setAddOperation(repository::save);
@@ -34,6 +43,23 @@ public class TimeSheetView extends FormLayout {
           .addColumn(user -> user.getEmployee().getLastName() + " " + user.getEmployee().getFirstName())
           .setHeader("Сотрудник");
         grid.setColumnOrder(List.of(employee, date, hours, product));
+
+        CrudFormFactory<TimeSheet> crudFormFactory = gridCrud.getCrudFormFactory();
+        crudFormFactory.setVisibleProperties("employee", "date", "hours", "product");
+        crudFormFactory.setFieldProvider("product",
+          new ComboBoxProvider<>(
+            "Продукт",
+            productRepository.findAll(),
+            new TextRenderer<>(Product::getTitle),
+            Product::getTitle
+          ));
+        crudFormFactory.setFieldProvider("employee",
+          new ComboBoxProvider<>(
+            "Сотрудник",
+            employeeRepository.findAll(),
+            new TextRenderer<>(item -> item.getLastName() + " " + item.getFirstName()),
+            item -> item.getLastName() + " " + item.getFirstName()
+          ));
 
         add(gridCrud);
     }
