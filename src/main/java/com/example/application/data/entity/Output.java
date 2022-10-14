@@ -19,6 +19,9 @@ public class Output {
     @JoinColumn(name="product_id", nullable=false)
     private Product product;
 
+    public String getName() {
+        return product.getTitle();
+    }
     public Integer getId() {
         return id;
     }
