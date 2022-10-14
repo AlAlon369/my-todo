@@ -2,7 +2,6 @@ package com.example.application.views;
 
 import javax.annotation.security.RolesAllowed;
 
-import com.example.application.data.entity.Output;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -39,9 +38,9 @@ public class AppLayoutBasic extends AppLayout {
         tabs.add(
                 createTab(VaadinIcon.SPECIALIST, "Сотрудники", EmployeesView.class),
                 createTab(VaadinIcon.HOURGLASS, "Табель учёта", TimeSheetView.class),
-                createTab(VaadinIcon.FLASK, "Продукты", ProductView.class),
-                createTab(VaadinIcon.FLASK, "Типы расходов", CostView.class),
-                createTab(VaadinIcon.FLASK, "Выпуск продукции", OutputView.class)
+                createTab(VaadinIcon.DATABASE, "Продукты", ProductView.class),
+                createTab(VaadinIcon.MONEY, "Типы расходов", CostView.class),
+                createTab(VaadinIcon.FACTORY, "Выпуск продукции", OutputView.class)
         );
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         return tabs;
