@@ -1,5 +1,7 @@
 package com.example.application.data.entity;
 
+import java.time.LocalDate;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -11,7 +13,7 @@ public class Output {
     @Id
     @GeneratedValue
     private Integer id;
-    private Integer date;
+    private LocalDate date;
     private Integer amount;
     @OneToOne
     @JoinColumn(name="product_id", nullable=false)
@@ -23,14 +25,6 @@ public class Output {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getDate() {
-        return date;
-    }
-
-    public void setDate(Integer date) {
-        this.date = date;
     }
 
     public Integer getAmount() {
@@ -47,5 +41,13 @@ public class Output {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 }
