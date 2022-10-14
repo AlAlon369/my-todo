@@ -24,17 +24,15 @@ public class TimeSheetView extends FormLayout {
         gridCrud.setDeleteOperation(repository::delete);
 
         Grid<TimeSheet> grid = gridCrud.getGrid();
-
         grid.removeColumnByKey("id");
         grid.removeColumnByKey("employee");
         grid.removeColumnByKey("product");
         Grid.Column<TimeSheet> hours = grid.getColumnByKey("hours");
         Grid.Column<TimeSheet> date = grid.getColumnByKey("date");
         Grid.Column<TimeSheet> product = grid.addColumn(user -> user.getProduct().getTitle()).setHeader("Продукт");
-        Grid.Column<TimeSheet> employee = grid.addColumn(
-        user -> user.getEmployee().getLastName() + " " + user.getEmployee().getFirstName()).setHeader(
-        "Сотрудник");
-
+        Grid.Column<TimeSheet> employee = grid
+          .addColumn(user -> user.getEmployee().getLastName() + " " + user.getEmployee().getFirstName())
+          .setHeader("Сотрудник");
         grid.setColumnOrder(List.of(employee, date, hours, product));
 
         add(gridCrud);
