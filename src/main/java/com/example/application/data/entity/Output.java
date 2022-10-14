@@ -3,6 +3,8 @@ package com.example.application.data.entity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Output {
@@ -11,7 +13,9 @@ public class Output {
     private Integer id;
     private Integer date;
     private Integer amount;
-    private Integer productId;
+    @OneToOne
+    @JoinColumn(name="product_id", nullable=false)
+    private Product product;
 
     public Integer getId() {
         return id;
@@ -37,11 +41,11 @@ public class Output {
         this.amount = amount;
     }
 
-    public Integer getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductId(Integer product_id) {
-        this.productId = product_id;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }
