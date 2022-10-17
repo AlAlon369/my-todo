@@ -4,6 +4,9 @@ import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
 
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.textfield.TextField;
 import org.vaadin.crudui.crud.impl.GridCrud;
 import org.vaadin.crudui.form.CrudFormFactory;
 import org.vaadin.crudui.form.impl.field.provider.ComboBoxProvider;
@@ -36,8 +39,8 @@ public class TimeSheetView extends FormLayout {
         grid.removeColumnByKey("id");
         grid.removeColumnByKey("employee");
         grid.removeColumnByKey("product");
-        Grid.Column<TimeSheet> hours = grid.getColumnByKey("hours");
-        Grid.Column<TimeSheet> date = grid.getColumnByKey("date");
+        Grid.Column<TimeSheet> hours = grid.getColumnByKey("hours").setHeader("Часы");
+        Grid.Column<TimeSheet> date = grid.getColumnByKey("date").setHeader("Дата");
         Grid.Column<TimeSheet> product = grid.addColumn(user -> user.getProduct().getTitle()).setHeader("Продукт");
         Grid.Column<TimeSheet> employee = grid
           .addColumn(user -> user.getEmployee().getLastName() + " " + user.getEmployee().getFirstName())
@@ -45,6 +48,10 @@ public class TimeSheetView extends FormLayout {
         grid.setColumnOrder(List.of(employee, date, hours, product));
 
         CrudFormFactory<TimeSheet> crudFormFactory = gridCrud.getCrudFormFactory();
+        crudFormFactory.setFieldCreationListener("date", field -> ((DatePicker) field).setLabel("Дата"));
+        crudFormFactory.setFieldCreationListener("employee", field -> ((ComboBox<?>) field).setLabel("Сотрудник"));
+        crudFormFactory.setFieldCreationListener("hours", field -> ((TextField) field).setLabel("Часы"));
+        crudFormFactory.setFieldCreationListener("product", field -> ((ComboBox<?>) field).setLabel("Продукт"));
         crudFormFactory.setVisibleProperties("employee", "date", "hours", "product");
         crudFormFactory.setFieldProvider("product",
           new ComboBoxProvider<>(

@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import javax.annotation.security.RolesAllowed;
 
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.textfield.TextField;
 import org.vaadin.crudui.crud.impl.GridCrud;
 import org.vaadin.crudui.form.CrudFormFactory;
 import org.vaadin.crudui.form.impl.field.provider.ComboBoxProvider;
@@ -47,6 +49,9 @@ public class CostAccountingView extends FormLayout {
                            GridCrud<CostAccounting> crud) {
         CrudFormFactory<CostAccounting> crudFormFactory = crud.getCrudFormFactory();
         crudFormFactory.setVisibleProperties("cost", "amount", "output");
+        crudFormFactory.setFieldCreationListener("cost", field -> ((ComboBox<?>) field).setLabel("Типы расходов"));
+        crudFormFactory.setFieldCreationListener("amount", field -> ((TextField) field).setLabel("Количество"));
+        crudFormFactory.setFieldCreationListener("output", field -> ((ComboBox<?>) field).setLabel("Выпуск продукции"));
         crudFormFactory.setFieldProvider("cost", new ComboBoxProvider<>(
           "Затраты",
           costRepository.findAll(),

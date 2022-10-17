@@ -4,8 +4,11 @@ import com.example.application.data.entity.Output;
 import com.example.application.data.entity.Product;
 import com.example.application.data.repository.OutputRepository;
 import com.example.application.data.repository.ProductRepository;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.TextRenderer;
 import com.vaadin.flow.router.Route;
 import org.vaadin.crudui.crud.impl.GridCrud;
@@ -33,6 +36,9 @@ public class OutputView extends FormLayout {
 
         CrudFormFactory<Output> crudFormFactory = crud.getCrudFormFactory();
         crudFormFactory.setVisibleProperties("date", "amount", "product");
+        crudFormFactory.setFieldCreationListener("amount", field -> ((TextField) field).setLabel("Количество"));
+        crudFormFactory.setFieldCreationListener("date", field -> ((DatePicker) field).setLabel("Дата"));
+        crudFormFactory.setFieldCreationListener("product", field -> ((ComboBox<?>) field).setLabel("Продукт"));
         crudFormFactory.setFieldProvider("product",
           new ComboBoxProvider<>("Продукт", productRepository.findAll(), new TextRenderer<>(Product::getTitle), Product::getTitle));
 
