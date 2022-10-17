@@ -1,5 +1,6 @@
 package com.example.application.views;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
@@ -48,7 +49,12 @@ public class TimeSheetView extends FormLayout {
         grid.setColumnOrder(List.of(employee, date, hours, product));
 
         CrudFormFactory<TimeSheet> crudFormFactory = gridCrud.getCrudFormFactory();
-        crudFormFactory.setFieldCreationListener("date", field -> ((DatePicker) field).setLabel("Дата"));
+        crudFormFactory.setFieldCreationListener("date",
+          field -> {
+            DatePicker datePicker = (DatePicker) field;
+            datePicker.setLabel("Дата");
+            datePicker.setValue(LocalDate.now());
+          });
         crudFormFactory.setFieldCreationListener("employee", field -> ((ComboBox<?>) field).setLabel("Сотрудник"));
         crudFormFactory.setFieldCreationListener("hours", field -> ((TextField) field).setLabel("Часы"));
         crudFormFactory.setFieldCreationListener("product", field -> ((ComboBox<?>) field).setLabel("Продукт"));
