@@ -11,12 +11,12 @@ public class TimeSheet {
     private Integer hours;
     private LocalDate date;
     @ManyToOne
-    @JoinColumn(name="employee_id", nullable=false)
+    @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
     @OneToOne
-    @JoinColumn(name="product_id", nullable=false)
-    private Product product;
+    @JoinColumn(name = "operation_id", nullable = false)
+    private Operation operation;
 
     public Integer getId() {
         return id;
@@ -50,11 +50,11 @@ public class TimeSheet {
         this.employee = employee;
     }
 
-    public Product getProduct() {
-        return product;
+    public Operation getOperation() {
+        return operation;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setOperation(Operation operation) {
+        this.operation = operation;
     }
 }
