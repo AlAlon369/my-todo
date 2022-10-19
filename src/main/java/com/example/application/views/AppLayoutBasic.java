@@ -37,6 +37,7 @@ public class AppLayoutBasic extends AppLayout {
         Tabs tabs = new Tabs();
         tabs.add(
                 createTab(VaadinIcon.SPECIALIST, "Сотрудники", EmployeesView.class),
+                createTab(VaadinIcon.SPECIALIST, "Операции", OperationView.class),
                 createTab(VaadinIcon.DATABASE, "Продукты", ProductView.class),
                 createTab(VaadinIcon.MONEY, "Типы расходов", CostView.class),
                 createTab(VaadinIcon.HOURGLASS, "Табель учёта по продуктам", TimeSheetView.class),
