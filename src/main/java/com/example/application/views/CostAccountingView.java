@@ -44,6 +44,7 @@ public class CostAccountingView extends FormLayout {
         crud.getGrid().addColumn(costAccounting -> costAccounting.getCost().getName()).setHeader("Наименование расхода");
         crud.getGrid().addColumn(CostAccounting::getAmount).setHeader("Количество");
     }
+
     private void setFields(CostRepository costRepository,
                            OutputRepository outputRepository,
                            GridCrud<CostAccounting> crud) {
@@ -53,14 +54,14 @@ public class CostAccountingView extends FormLayout {
         crudFormFactory.setFieldCreationListener("amount", field -> ((TextField) field).setLabel("Количество"));
         crudFormFactory.setFieldCreationListener("output", field -> ((ComboBox<?>) field).setLabel("Выпуск продукции"));
         crudFormFactory.setFieldProvider("cost", new ComboBoxProvider<>(
-          "Затраты",
-          costRepository.findAll(),
-          new TextRenderer<>(Cost::getName),
-          Cost::getName));
+                "Затраты",
+                costRepository.findAll(),
+                new TextRenderer<>(Cost::getName),
+                Cost::getName));
         crudFormFactory.setFieldProvider("output", new ComboBoxProvider<>(
-          "Выпуск продукции",
-          outputRepository.findByDateAfter(LocalDate.now().minusDays(7)),
-          new TextRenderer<>(output -> output.getProduct().getTitle() + " " + output.getDate()),
-          output -> output.getProduct().getTitle() + " " + output.getDate()));
+                "Выпуск продукции",
+                outputRepository.findByDateAfter(LocalDate.now().minusDays(7)),
+                new TextRenderer<>(output -> output.getProduct().getTitle() + " " + output.getDate()),
+                output -> output.getProduct().getTitle() + " " + output.getDate()));
     }
 }

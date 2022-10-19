@@ -12,7 +12,7 @@ public class GeneralTimeSheet {
     private LocalDate date;
 
     @OneToOne
-    @JoinColumn(name="employee_id", nullable=false)
+    @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
     public Integer getId() {

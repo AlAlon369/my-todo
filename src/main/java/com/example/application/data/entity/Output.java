@@ -16,7 +16,7 @@ public class Output {
     private LocalDate date;
     private Integer amount;
     @OneToOne
-    @JoinColumn(name="product_id", nullable=false)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     public Integer getId() {

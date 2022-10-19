@@ -1,4 +1,5 @@
 package com.example.application.views;
+
 import com.example.application.data.entity.Cost;
 import com.example.application.data.repository.CostRepository;
 import com.vaadin.flow.component.formlayout.FormLayout;

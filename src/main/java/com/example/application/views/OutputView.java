@@ -40,7 +40,7 @@ public class OutputView extends FormLayout {
         crudFormFactory.setFieldCreationListener("date", field -> ((DatePicker) field).setLabel("Дата"));
         crudFormFactory.setFieldCreationListener("product", field -> ((ComboBox<?>) field).setLabel("Продукт"));
         crudFormFactory.setFieldProvider("product",
-          new ComboBoxProvider<>("Продукт", productRepository.findAll(), new TextRenderer<>(Product::getTitle), Product::getTitle));
+                new ComboBoxProvider<>("Продукт", productRepository.findAll(), new TextRenderer<>(Product::getTitle), Product::getTitle));
 
         add(crud);
     }

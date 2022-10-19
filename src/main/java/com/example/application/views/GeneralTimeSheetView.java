@@ -22,8 +22,7 @@ import java.util.List;
 @RolesAllowed("USER")
 public class GeneralTimeSheetView extends FormLayout {
 
-    public GeneralTimeSheetView(GeneralTimeSheetRepository repository, EmployeeRepository employeeRepository)
-    {
+    public GeneralTimeSheetView(GeneralTimeSheetRepository repository, EmployeeRepository employeeRepository) {
         GridCrud<GeneralTimeSheet> gridCrud = new GridCrud<>(GeneralTimeSheet.class);
         gridCrud.setFindAllOperation(repository::findAll);
         gridCrud.setAddOperation(repository::save);

@@ -12,7 +12,7 @@ import com.vaadin.flow.router.Route;
 @Route(value = "", layout = AppLayoutBasic.class)
 @RolesAllowed("USER")
 public class MainView extends VerticalLayout {
-  public MainView() {
-    add(new H1("Привет"));
-  }
+    public MainView() {
+        add(new H1("Привет"));
+    }
 }
