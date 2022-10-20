@@ -40,10 +40,11 @@ public class AppLayoutBasic extends AppLayout {
                 createTab(VaadinIcon.SPECIALIST, "Операции", OperationView.class),
                 createTab(VaadinIcon.DATABASE, "Продукты", ProductView.class),
                 createTab(VaadinIcon.MONEY, "Типы расходов", CostView.class),
-                createTab(VaadinIcon.HOURGLASS, "Табель учёта по продуктам", TimeSheetView.class),
                 createTab(VaadinIcon.HOURGLASS, "Общий табель учёта", GeneralTimeSheetView.class),
+                createTab(VaadinIcon.HOURGLASS, "Табель учёта по операциям", TimeSheetView.class),
                 createTab(VaadinIcon.FACTORY, "Выпуск продукции", OutputView.class),
-                createTab(VaadinIcon.MONEY_WITHDRAW, "Таблица расходов", CostAccountingView.class)
+                createTab(VaadinIcon.MONEY_WITHDRAW, "Таблица расходов", CostAccountingView.class),
+                createTab(VaadinIcon.TIME_BACKWARD, "Отчет по общему табелю", GeneralTimeSheetReportView.class)
         );
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         return tabs;
