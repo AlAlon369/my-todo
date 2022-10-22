@@ -9,12 +9,9 @@ public class Client {
     @Id
     @GeneratedValue
     private Integer id;
-    private String firstname;
-    private String name;
     private String company;
     private String phone;
     private String email;
-    private boolean working;
 
     public Integer getId() {
         return id;
@@ -22,22 +19,6 @@ public class Client {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getCompany() {
@@ -62,13 +43,5 @@ public class Client {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public boolean getWorking() {
-        return working;
-    }
-
-    public void setWorking(Boolean working) {
-        this.working = working;
     }
 }
