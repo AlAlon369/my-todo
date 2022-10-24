@@ -13,7 +13,7 @@ import com.vaadin.flow.router.Route;
 @Route(value = "booking", layout = AppLayoutBasic.class)
 @RolesAllowed("USER")
 public class BookingView extends FormLayout {
-    public BookingView(BookingRepository repository) {
+    public BookingView(BookingRepository repository ) {
         GridCrud<Booking> crud = new GridCrud<>(Booking.class);
         crud.setFindAllOperation(repository::findAll);
         crud.setAddOperation(repository::save);

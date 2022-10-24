@@ -1,5 +1,7 @@
 package com.example.application.data.entity;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,22 +9,18 @@ public class Booking {
     @Id
     @GeneratedValue
     private Integer id;
-    private String quantity;
-
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
-
+    @OneToMany
+    private List<ProductOrder> productOrders;
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
-    public Product getProduct() {
-        return product;
+    public List<ProductOrder> getProductOrders() {
+        return productOrders;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProductOrders(List<ProductOrder> orders) {
+        this.productOrders = orders;
     }
 
     public Client getClient() {
@@ -39,13 +37,5 @@ public class Booking {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
     }
 }
