@@ -14,7 +14,7 @@ public class TimeSheet {
     @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "operation_id", nullable = false)
     private Operation operation;
 

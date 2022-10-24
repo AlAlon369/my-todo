@@ -3,7 +3,7 @@ package com.example.application.data.entity;
 import javax.persistence.*;
 
 @Entity
-public class Order {
+public class Booking {
     @Id
     @GeneratedValue
     private Integer id;
@@ -13,9 +13,17 @@ public class Order {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
     public Client getClient() {
         return client;
@@ -39,13 +47,5 @@ public class Order {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
     }
 }

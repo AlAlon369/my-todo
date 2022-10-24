@@ -46,7 +46,7 @@ public class AppLayoutBasic extends AppLayout {
                 createTab(VaadinIcon.MONEY_WITHDRAW, "Таблица расходов", CostAccountingView.class),
                 createTab(VaadinIcon.TIME_BACKWARD, "Отчет по общему табелю", GeneralTimeSheetReportView.class),
                 createTab(VaadinIcon.USER_CHECK, "Клиенты", ClientsView.class),
-                createTab(VaadinIcon.USER_CHECK, "Заказы", OrdersView.class)
+                createTab(VaadinIcon.USER_CHECK, "Заказы", BookingView.class)
         );
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         return tabs;

@@ -8,7 +8,7 @@ public class CostAccounting {
     @GeneratedValue
     private Integer id;
     private Integer amount;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "cost_id", nullable = false)
     private Cost cost;
 

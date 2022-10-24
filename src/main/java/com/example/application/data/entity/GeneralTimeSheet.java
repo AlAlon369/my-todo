@@ -11,7 +11,7 @@ public class GeneralTimeSheet {
     private Integer hours;
     private LocalDate date;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
