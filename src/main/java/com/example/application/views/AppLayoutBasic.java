@@ -16,7 +16,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 
 @PageTitle("Сотрудники | Vaadin CRM")
-@Route(value = "Employee")
+@Route(value = "Главная страница")
 @RolesAllowed("USER")
 public class AppLayoutBasic extends AppLayout {
 
@@ -44,7 +44,9 @@ public class AppLayoutBasic extends AppLayout {
                 createTab(VaadinIcon.HOURGLASS, "Табель учёта по операциям", TimeSheetView.class),
                 createTab(VaadinIcon.FACTORY, "Выпуск продукции", OutputView.class),
                 createTab(VaadinIcon.MONEY_WITHDRAW, "Таблица расходов", CostAccountingView.class),
-                createTab(VaadinIcon.TIME_BACKWARD, "Отчет по общему табелю", GeneralTimeSheetReportView.class)
+                createTab(VaadinIcon.TIME_BACKWARD, "Отчет по общему табелю", GeneralTimeSheetReportView.class),
+                createTab(VaadinIcon.USER_CHECK, "Клиенты", ClientsView.class),
+                createTab(VaadinIcon.USER_CHECK, "Заказы", OrdersView.class)
         );
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         return tabs;
