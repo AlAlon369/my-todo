@@ -10,16 +10,17 @@ public class Booking {
     @GeneratedValue
     private Integer id;
     @OneToMany
-    private List<ProductOrder> productOrders;
+    @JoinColumn(name = "booking_id")
+    private List<BookingProduct> bookingProducts;
     @ManyToOne
     private Client client;
 
-    public List<ProductOrder> getProductOrders() {
-        return productOrders;
+    public List<BookingProduct> getProductOrders() {
+        return bookingProducts;
     }
 
-    public void setProductOrders(List<ProductOrder> orders) {
-        this.productOrders = orders;
+    public void setProductOrders(List<BookingProduct> orders) {
+        this.bookingProducts = orders;
     }
 
     public Client getClient() {

@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class ProductOrder {
+public class BookingProduct {
   @Id
   @GeneratedValue
   private Integer id;
