@@ -31,17 +31,13 @@ public class ClientsView extends FormLayout {
 
     private void translateForms(GridCrud<Client> crud) {
         CrudFormFactory<Client> crudFormFactory = crud.getCrudFormFactory();
-        crudFormFactory.setVisibleProperties("company", "phone", "email");
+        crudFormFactory.setVisibleProperties("company");
         crudFormFactory.setFieldCreationListener("company", field -> ((TextField) field).setLabel("Компания"));
-        crudFormFactory.setFieldCreationListener("phone", field -> ((TextField) field).setLabel("Телефон"));
-        crudFormFactory.setFieldCreationListener("email", field -> ((TextField) field).setLabel("Электронная почта"));
     }
 
     private void setColumns(GridCrud<Client> crud) {
         Grid<Client> grid = crud.getGrid();
         grid.getColumnByKey("company").setHeader("Компания");
-        grid.getColumnByKey("phone").setHeader("Телефон");
-        grid.getColumnByKey("email").setHeader("Электронная почта");
         grid.getColumnByKey("id").setVisible(false);
     }
 }
