@@ -1,5 +1,6 @@
 package com.example.application.data.entity;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.*;
@@ -9,19 +10,12 @@ public class Booking {
     @Id
     @GeneratedValue
     private Integer id;
+    private LocalDate date;
     @OneToMany
     @JoinColumn(name = "booking_id")
     private List<BookingProduct> bookingProducts;
     @ManyToOne
     private Client client;
-
-    public List<BookingProduct> getProductOrders() {
-        return bookingProducts;
-    }
-
-    public void setProductOrders(List<BookingProduct> orders) {
-        this.bookingProducts = orders;
-    }
 
     public Client getClient() {
         return client;
@@ -37,5 +31,21 @@ public class Booking {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public List<BookingProduct> getBookingProducts() {
+        return bookingProducts;
+    }
+
+    public void setBookingProducts(List<BookingProduct> bookingProducts) {
+        this.bookingProducts = bookingProducts;
     }
 }
