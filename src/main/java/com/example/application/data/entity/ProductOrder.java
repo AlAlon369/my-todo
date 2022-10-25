@@ -3,6 +3,7 @@ package com.example.application.data.entity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class ProductOrder {
@@ -11,7 +12,8 @@ public class ProductOrder {
   private Integer id;
   private double price;
   private int quantity;
-  private String product;
+  @ManyToOne
+  private Product product;
 
   public Integer getId() {
     return id;
@@ -37,11 +39,11 @@ public class ProductOrder {
     this.price = price;
   }
 
-  public String getProduct() {
+  public Product getProduct() {
     return product;
   }
 
-  public void setProduct(String product) {
+  public void setProduct(Product product) {
     this.product = product;
   }
 }
