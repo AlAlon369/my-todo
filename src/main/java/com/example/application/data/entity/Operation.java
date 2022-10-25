@@ -11,7 +11,6 @@ public class Operation {
     private String title;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     public Integer getId() {

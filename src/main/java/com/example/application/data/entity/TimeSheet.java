@@ -11,11 +11,9 @@ public class TimeSheet {
     private Integer hours;
     private LocalDate date;
     @ManyToOne
-    @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
     @ManyToOne
-    @JoinColumn(name = "operation_id", nullable = false)
     private Operation operation;
 
     public Integer getId() {

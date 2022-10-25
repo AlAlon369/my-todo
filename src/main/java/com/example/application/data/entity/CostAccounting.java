@@ -9,11 +9,9 @@ public class CostAccounting {
     private Integer id;
     private Integer amount;
     @ManyToOne
-    @JoinColumn(name = "cost_id", nullable = false)
     private Cost cost;
 
     @ManyToOne
-    @JoinColumn(name = "output_id", nullable = false)
     private Output output;
 
     public Integer getId() {

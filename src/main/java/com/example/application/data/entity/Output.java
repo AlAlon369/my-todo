@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -16,7 +15,6 @@ public class Output {
     private LocalDate date;
     private Integer amount;
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     public Integer getId() {
