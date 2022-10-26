@@ -14,6 +14,8 @@ public class BookingProduct {
   private int quantity;
   @ManyToOne
   private Product product;
+  @ManyToOne
+  private Booking booking;
 
   public Integer getId() {
     return id;
@@ -45,5 +47,13 @@ public class BookingProduct {
 
   public void setProduct(Product product) {
     this.product = product;
+  }
+
+  public Booking getBooking() {
+    return booking;
+  }
+
+  public void setBooking(Booking booking) {
+    this.booking = booking;
   }
 }
