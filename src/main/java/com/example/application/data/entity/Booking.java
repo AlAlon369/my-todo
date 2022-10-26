@@ -11,7 +11,7 @@ public class Booking {
     @GeneratedValue
     private Integer id;
     private LocalDate date;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "booking_id")
     private List<BookingProduct> bookingProducts;
     @ManyToOne
