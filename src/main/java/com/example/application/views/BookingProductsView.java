@@ -15,7 +15,7 @@ import com.vaadin.flow.router.Route;
 
 @Route(value = "booking", layout = AppLayoutBasic.class)
 @RolesAllowed("USER")
-public class BookingProductsView extends FormLayout implements HasUrlParameter<String> {
+public class BookingProductsView extends FormLayout implements HasUrlParameter<Integer> {
   private final GridCrud<BookingProduct> crud;
   private final transient BookingRepository bookingRepository;
   private final transient BookingProductRepository repository;
@@ -31,8 +31,8 @@ public class BookingProductsView extends FormLayout implements HasUrlParameter<S
   }
 
   @Override
-  public void setParameter(BeforeEvent event, String parameter) {
-    Booking booking = bookingRepository.findById(Integer.valueOf(parameter)).orElseThrow();
+  public void setParameter(BeforeEvent event, Integer bookingId) {
+    Booking booking = bookingRepository.findById(bookingId).orElseThrow();
     crud.setFindAllOperation(() -> repository.findByBooking(booking));
     crud.refreshGrid();
   }

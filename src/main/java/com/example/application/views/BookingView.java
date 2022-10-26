@@ -22,14 +22,16 @@ public class BookingView extends FormLayout {
         crud.setDeleteOperation(bookingRepository::delete);
 
         Button button = new Button("Подробности заказа");
+        button.setEnabled(false);
         button.addClickListener(e ->
           button.getUI().ifPresent(ui ->
             ui.navigate(
               BookingProductsView.class,
-              String.valueOf(crud.getGrid().getSelectedItems().iterator().next().getId())
+              crud.getGrid().getSelectedItems().iterator().next().getId()
             )
           )
         );
+        crud.getGrid().addItemClickListener(event -> button.setEnabled(true));
 
         VerticalLayout verticalLayout = new VerticalLayout(button, crud);
         add(verticalLayout);
