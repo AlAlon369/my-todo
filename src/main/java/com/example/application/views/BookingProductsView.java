@@ -2,6 +2,8 @@ package com.example.application.views;
 
 import javax.annotation.security.RolesAllowed;
 
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.textfield.TextField;
 import org.vaadin.crudui.crud.impl.GridCrud;
 
 import com.example.application.data.entity.Booking;
@@ -12,6 +14,8 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.Route;
+import org.vaadin.crudui.form.CrudFormFactory;
+
 
 @Route(value = "booking", layout = AppLayoutBasic.class)
 @RolesAllowed("USER")
@@ -27,7 +31,20 @@ public class BookingProductsView extends FormLayout implements HasUrlParameter<I
     crud.setAddOperation(repository::save);
     crud.setUpdateOperation(repository::save);
     crud.setDeleteOperation(repository::delete);
-    add(crud);
+
+     Grid<BookingProduct> grid = crud.getGrid();
+     grid.removeColumnByKey("id");
+     grid.getColumnByKey("price").setHeader("Цена");
+     grid.getColumnByKey("product").setHeader("Продукт");
+     grid.getColumnByKey("quantity").setHeader("Количество");
+     grid.getColumnByKey("booking").setHeader("Заказ");
+
+    CrudFormFactory<BookingProduct> crudFormFactory = crud.getCrudFormFactory();
+    crudFormFactory.setFieldCreationListener("price", field -> ((TextField) field).setLabel("Цена"));
+    crudFormFactory.setFieldCreationListener("quantity", field -> ((TextField) field).setLabel("Количество"));
+    crudFormFactory.setFieldCreationListener("id", field -> ((TextField) field).setVisible(false));
+
+     add(crud);
   }
 
   @Override
