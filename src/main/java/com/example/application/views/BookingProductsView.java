@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
 
+import com.example.application.data.entity.Product;
+import com.example.application.data.repository.ProductRepository;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.textfield.TextField;
 import org.vaadin.crudui.crud.impl.GridCrud;
@@ -13,10 +15,12 @@ import com.example.application.data.entity.BookingProduct;
 import com.example.application.data.repository.BookingProductRepository;
 import com.example.application.data.repository.BookingRepository;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.data.renderer.TextRenderer;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.Route;
 import org.vaadin.crudui.form.CrudFormFactory;
+import org.vaadin.crudui.form.impl.field.provider.ComboBoxProvider;
 
 
 @Route(value = "booking", layout = AppLayoutBasic.class)
@@ -26,11 +30,12 @@ public class BookingProductsView extends FormLayout implements HasUrlParameter<I
   private final transient BookingRepository bookingRepository;
   private final transient BookingProductRepository repository;
 
-  public BookingProductsView(BookingProductRepository repository, BookingRepository bookingRepository) {
+  public BookingProductsView(BookingProductRepository repository,
+                             BookingRepository bookingRepository,
+                             ProductRepository productRepository) {
     this.bookingRepository = bookingRepository;
     this.repository = repository;
     crud = new GridCrud<>(BookingProduct.class);
-    crud.setAddOperation(repository::save);
     crud.setUpdateOperation(repository::save);
     crud.setDeleteOperation(repository::delete);
 
@@ -49,6 +54,13 @@ public class BookingProductsView extends FormLayout implements HasUrlParameter<I
     crudFormFactory.setFieldCreationListener("price", field -> ((TextField) field).setLabel("Цена"));
     crudFormFactory.setFieldCreationListener("quantity", field -> ((TextField) field).setLabel("Количество"));
     crudFormFactory.setFieldCreationListener("id", field -> ((TextField) field).setVisible(false));
+    crudFormFactory.setFieldProvider("product",
+      new ComboBoxProvider<>(
+        "Продукт",
+        productRepository.findAll(),
+        new TextRenderer<>(Product::getTitle),
+        Product::getTitle
+      ));
 
     add(crud);
   }
@@ -57,6 +69,10 @@ public class BookingProductsView extends FormLayout implements HasUrlParameter<I
   public void setParameter(BeforeEvent event, Integer bookingId) {
     Booking booking = bookingRepository.findById(bookingId).orElseThrow();
     crud.setFindAllOperation(() -> repository.findByBooking(booking));
+    crud.setAddOperation(entity -> {
+      entity.setBooking(booking);
+      return repository.save(entity);
+    });
     crud.refreshGrid();
   }
 }
