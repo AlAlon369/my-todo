@@ -33,6 +33,9 @@ public class BookingView extends FormLayout {
         grid.getColumnByKey("client").setHeader("Клиент");
         grid.removeColumnByKey("id");
         grid.removeColumnByKey("bookingProducts");
+        grid.removeColumnByKey("client");
+        grid.addColumn(booking -> booking.getClient() != null ? booking.getClient().getCompany() : null)
+          .setHeader("Клиент");
 
         CrudFormFactory<Booking> crudFormFactory = crud.getCrudFormFactory();
         crudFormFactory.setVisibleProperties("client", "date");
