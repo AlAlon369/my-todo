@@ -1,5 +1,7 @@
 package com.example.application.views;
 
+import java.util.List;
+
 import javax.annotation.security.RolesAllowed;
 
 import com.vaadin.flow.component.grid.Grid;
@@ -32,19 +34,23 @@ public class BookingProductsView extends FormLayout implements HasUrlParameter<I
     crud.setUpdateOperation(repository::save);
     crud.setDeleteOperation(repository::delete);
 
-     Grid<BookingProduct> grid = crud.getGrid();
-     grid.removeColumnByKey("id");
-     grid.getColumnByKey("price").setHeader("Цена");
-     grid.getColumnByKey("product").setHeader("Продукт");
-     grid.getColumnByKey("quantity").setHeader("Количество");
-     grid.getColumnByKey("booking").setHeader("Заказ");
+    Grid<BookingProduct> grid = crud.getGrid();
+    grid.removeColumnByKey("id");
+    grid.removeColumnByKey("product");
+    grid.removeColumnByKey("booking");
+    Grid.Column<BookingProduct> price = grid.getColumnByKey("price").setHeader("Цена");
+    Grid.Column<BookingProduct> quantity = grid.getColumnByKey("quantity").setHeader("Количество");
+    Grid.Column<BookingProduct> product = grid.addColumn(
+        booking -> booking.getProduct() != null ? booking.getProduct().getTitle() : null)
+      .setHeader("Продукт");
+    grid.setColumnOrder(List.of(product, quantity, price));
 
     CrudFormFactory<BookingProduct> crudFormFactory = crud.getCrudFormFactory();
     crudFormFactory.setFieldCreationListener("price", field -> ((TextField) field).setLabel("Цена"));
     crudFormFactory.setFieldCreationListener("quantity", field -> ((TextField) field).setLabel("Количество"));
     crudFormFactory.setFieldCreationListener("id", field -> ((TextField) field).setVisible(false));
 
-     add(crud);
+    add(crud);
   }
 
   @Override
