@@ -7,6 +7,8 @@ import javax.annotation.security.RolesAllowed;
 import com.example.application.data.entity.Product;
 import com.example.application.data.repository.ProductRepository;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import org.vaadin.crudui.crud.impl.GridCrud;
 
@@ -25,14 +27,16 @@ import org.vaadin.crudui.form.impl.field.provider.ComboBoxProvider;
 
 @Route(value = "booking", layout = AppLayoutBasic.class)
 @RolesAllowed("USER")
-public class BookingProductsView extends FormLayout implements HasUrlParameter<Integer> {
+public class BookingDetailsView extends FormLayout implements HasUrlParameter<Integer> {
   private final GridCrud<BookingProduct> crud;
+  private final TextField dateBooking;
+  private final TextField clientBooking;
   private final transient BookingRepository bookingRepository;
   private final transient BookingProductRepository repository;
 
-  public BookingProductsView(BookingProductRepository repository,
-                             BookingRepository bookingRepository,
-                             ProductRepository productRepository) {
+  public BookingDetailsView(BookingProductRepository repository,
+                            BookingRepository bookingRepository,
+                            ProductRepository productRepository) {
     this.bookingRepository = bookingRepository;
     this.repository = repository;
     crud = new GridCrud<>(BookingProduct.class);
@@ -62,12 +66,24 @@ public class BookingProductsView extends FormLayout implements HasUrlParameter<I
         Product::getTitle
       ));
 
-    add(crud);
+    dateBooking = new TextField();
+    dateBooking.setReadOnly(true);
+    dateBooking.setLabel("Дата заказа");
+
+    clientBooking = new TextField();
+    clientBooking.setReadOnly(true);
+    clientBooking.setLabel("Клиент");
+
+    HorizontalLayout detailLayout = new HorizontalLayout(dateBooking, clientBooking);
+    VerticalLayout mainLayout = new VerticalLayout(detailLayout, crud);
+    add(mainLayout);
   }
 
   @Override
   public void setParameter(BeforeEvent event, Integer bookingId) {
     Booking booking = bookingRepository.findById(bookingId).orElseThrow();
+    dateBooking.setValue(booking.getDate().toString());
+    clientBooking.setValue(booking.getClient().getCompany());
     crud.setFindAllOperation(() -> repository.findByBooking(booking));
     crud.setAddOperation(entity -> {
       entity.setBooking(booking);

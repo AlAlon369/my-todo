@@ -45,7 +45,7 @@ public class BookingView extends FormLayout {
           detailsButton.addClickListener(e ->
             this.getUI().ifPresent(ui ->
               ui.navigate(
-                BookingProductsView.class,
+                BookingDetailsView.class,
                 booking.getId()
               )));
           return detailsButton;
