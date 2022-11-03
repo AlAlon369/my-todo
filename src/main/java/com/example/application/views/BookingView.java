@@ -17,7 +17,6 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridSortOrder;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.SortDirection;
 import com.vaadin.flow.data.renderer.TextRenderer;
 import com.vaadin.flow.router.Route;
@@ -40,24 +39,24 @@ public class BookingView extends FormLayout {
         grid.removeColumnByKey("client");
         grid.addColumn(booking -> booking.getClient() != null ? booking.getClient().getCompany() : null)
           .setHeader("Клиент");
+
+        grid.addComponentColumn(booking -> {
+          Button detailsButton = new Button("Подробности");
+          detailsButton.addClickListener(e ->
+            this.getUI().ifPresent(ui ->
+              ui.navigate(
+                BookingProductsView.class,
+                booking.getId()
+              )));
+          return detailsButton;
+        }).setWidth("150px").setFlexGrow(0);
+
         GridSortOrder<Booking> order = new GridSortOrder<>(dateColumn, SortDirection.DESCENDING);
         grid.sort(List.of(order));
 
         CrudFormFactory<Booking> crudFormFactory = crud.getCrudFormFactory();
         crudFormFactory.setVisibleProperties("client", "date");
         crudFormFactory.setFieldCreationListener("date", field -> ((DatePicker) field).setLabel("Дата"));
-
-        Button button = new Button("Подробности заказа");
-        button.setEnabled(false);
-        button.addClickListener(e ->
-          button.getUI().ifPresent(ui ->
-            ui.navigate(
-              BookingProductsView.class,
-              crud.getGrid().getSelectedItems().iterator().next().getId()
-            )
-          )
-        );
-        crud.getGrid().addItemClickListener(event -> button.setEnabled(true));
 
         crudFormFactory.setFieldProvider("client",
                 new ComboBoxProvider<>(
@@ -66,7 +65,6 @@ public class BookingView extends FormLayout {
                         new TextRenderer<>(Client::getCompany),
                         Client::getCompany
                 ));
-        VerticalLayout verticalLayout = new VerticalLayout(button, crud);
-        add(verticalLayout);
+        add(crud);
     }
 }
