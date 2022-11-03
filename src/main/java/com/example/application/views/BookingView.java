@@ -1,22 +1,26 @@
 package com.example.application.views;
 
+import java.util.List;
+
 import javax.annotation.security.RolesAllowed;
 
-import com.example.application.data.entity.Client;
-import com.example.application.data.repository.ClientRepository;
-import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.data.renderer.TextRenderer;
 import org.vaadin.crudui.crud.impl.GridCrud;
-
-import com.example.application.data.entity.Booking;
-import com.example.application.data.repository.BookingRepository;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.Route;
 import org.vaadin.crudui.form.CrudFormFactory;
 import org.vaadin.crudui.form.impl.field.provider.ComboBoxProvider;
+
+import com.example.application.data.entity.Booking;
+import com.example.application.data.entity.Client;
+import com.example.application.data.repository.BookingRepository;
+import com.example.application.data.repository.ClientRepository;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridSortOrder;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.provider.SortDirection;
+import com.vaadin.flow.data.renderer.TextRenderer;
+import com.vaadin.flow.router.Route;
 
 @Route(value = "booking", layout = AppLayoutBasic.class)
 @RolesAllowed("USER")
@@ -29,13 +33,15 @@ public class BookingView extends FormLayout {
         crud.setDeleteOperation(bookingRepository::delete);
 
         Grid<Booking> grid = crud.getGrid();
-        grid.getColumnByKey("date").setHeader("Дата");
+        Grid.Column<Booking> dateColumn = grid.getColumnByKey("date").setHeader("Дата");
         grid.getColumnByKey("client").setHeader("Клиент");
         grid.removeColumnByKey("id");
         grid.removeColumnByKey("bookingProducts");
         grid.removeColumnByKey("client");
         grid.addColumn(booking -> booking.getClient() != null ? booking.getClient().getCompany() : null)
           .setHeader("Клиент");
+        GridSortOrder<Booking> order = new GridSortOrder<>(dateColumn, SortDirection.DESCENDING);
+        grid.sort(List.of(order));
 
         CrudFormFactory<Booking> crudFormFactory = crud.getCrudFormFactory();
         crudFormFactory.setVisibleProperties("client", "date");
