@@ -10,9 +10,6 @@ public class Operation {
     private Integer id;
     private String title;
 
-    @ManyToOne
-    private Product product;
-
     public Integer getId() {
         return id;
     }
@@ -27,13 +24,5 @@ public class Operation {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
     }
 }
