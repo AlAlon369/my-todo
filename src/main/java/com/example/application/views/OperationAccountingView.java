@@ -65,7 +65,7 @@ public class OperationAccountingView extends FormLayout {
     crudFormFactory.setFieldCreationListener("plan", field -> ((TextField) field).setLabel("План"));
     crudFormFactory.setFieldCreationListener("fact", field -> ((TextField) field).setLabel("Факт"));
     crudFormFactory.setFieldCreationListener("operation", field -> ((ComboBox<?>) field).setLabel("Операция"));
-    crudFormFactory.setVisibleProperties("date", "plan", "fact", "operation");
+    crudFormFactory.setVisibleProperties("operation", "date", "plan", "fact");
     crudFormFactory.setFieldProvider("operation",
       new ComboBoxProvider<>(
         "Операция",
