@@ -43,7 +43,6 @@ public class AppLayoutBasic extends AppLayout {
                 createTab(VaadinIcon.MONEY, "Типы расходов", CostView.class),
                 createTab(VaadinIcon.SPECIALIST, "Учет операций", OperationAccountingView.class),
                 createTab(VaadinIcon.HOURGLASS, "Общий табель учёта", GeneralTimeSheetView.class),
-                createTab(VaadinIcon.HOURGLASS, "Табель учёта по операциям", TimeSheetView.class),
                 createTab(VaadinIcon.TIME_BACKWARD, "Отчет по общему табелю", GeneralTimeSheetReportView.class),
                 createTab(VaadinIcon.FACTORY, "Выпуск продукции", OutputView.class),
                 createTab(VaadinIcon.MONEY_WITHDRAW, "Таблица расходов", CostAccountingView.class),

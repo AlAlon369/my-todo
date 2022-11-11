@@ -13,6 +13,8 @@ public class OperationTimeSheet {
   private Integer hours;
   @ManyToOne
   private Employee employee;
+  @ManyToOne
+  private OperationAccounting operationAccounting;
 
   public Integer getId() {
     return id;
@@ -36,5 +38,13 @@ public class OperationTimeSheet {
 
   public void setEmployee(Employee employee) {
     this.employee = employee;
+  }
+
+  public OperationAccounting getOperationAccounting() {
+    return operationAccounting;
+  }
+
+  public void setOperationAccounting(OperationAccounting operationAccounting) {
+    this.operationAccounting = operationAccounting;
   }
 }

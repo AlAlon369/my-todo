@@ -6,7 +6,10 @@ import javax.annotation.security.RolesAllowed;
 
 import com.example.application.data.entity.Product;
 import com.example.application.data.repository.ProductRepository;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -74,8 +77,10 @@ public class BookingDetailsView extends FormLayout implements HasUrlParameter<In
     clientBooking.setReadOnly(true);
     clientBooking.setLabel("Клиент");
 
+    Button back = new Button("Назад", new Icon(VaadinIcon.ARROW_LEFT));
+    back.addClickListener(e -> this.getUI().ifPresent(ui -> ui.navigate(BookingView.class)));
     HorizontalLayout detailLayout = new HorizontalLayout(dateBooking, clientBooking);
-    VerticalLayout mainLayout = new VerticalLayout(detailLayout, crud);
+    VerticalLayout mainLayout = new VerticalLayout(back, detailLayout, crud);
     add(mainLayout);
   }
 

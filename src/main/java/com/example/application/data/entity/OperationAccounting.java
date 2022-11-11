@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class OperationAccounting {
@@ -20,6 +21,7 @@ public class OperationAccounting {
   private Integer plan;
   private Integer fact;
   @ManyToOne
+  @NotNull
   private Operation operation;
   @OneToMany(fetch = FetchType.EAGER)
   @JoinColumn(name = "operation_accounting_id")
