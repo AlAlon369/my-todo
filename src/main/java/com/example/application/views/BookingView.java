@@ -1,5 +1,6 @@
 package com.example.application.views;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
@@ -39,6 +40,11 @@ public class BookingView extends FormLayout {
         grid.removeColumnByKey("client");
         grid.addColumn(booking -> booking.getClient() != null ? booking.getClient().getCompany() : null)
           .setHeader("Клиент");
+        crud.getGrid().addColumn(booking -> booking.getBookingProducts() != null
+          ? booking.getBookingProducts().stream()
+          .mapToInt(value -> value.getPrice().multiply(BigDecimal.valueOf(value.getQuantity())).intValue())
+          .sum()
+          : 0).setHeader("Сумма заказа");
 
         grid.addComponentColumn(booking -> {
           Button detailsButton = new Button("Подробности");

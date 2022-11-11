@@ -1,5 +1,7 @@
 package com.example.application.data.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -10,7 +12,7 @@ public class BookingProduct {
   @Id
   @GeneratedValue
   private Integer id;
-  private double price;
+  private BigDecimal price;
   private int quantity;
   @ManyToOne
   private Product product;
@@ -33,14 +35,6 @@ public class BookingProduct {
     this.quantity = quantity;
   }
 
-  public double getPrice() {
-    return price;
-  }
-
-  public void setPrice(double price) {
-    this.price = price;
-  }
-
   public Product getProduct() {
     return product;
   }
@@ -55,5 +49,13 @@ public class BookingProduct {
 
   public void setBooking(Booking booking) {
     this.booking = booking;
+  }
+
+  public BigDecimal getPrice() {
+    return price;
+  }
+
+  public void setPrice(BigDecimal price) {
+    this.price = price;
   }
 }

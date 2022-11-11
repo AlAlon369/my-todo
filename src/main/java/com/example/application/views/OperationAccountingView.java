@@ -41,7 +41,7 @@ public class OperationAccountingView extends FormLayout {
     Grid.Column<OperationAccounting> date = grid.getColumnByKey("date").setHeader("Дата");
     Grid.Column<OperationAccounting> operationName = crud.getGrid()
       .addColumn(accounting -> accounting.getOperation().getTitle())
-      .setHeader("Опепация");
+      .setHeader("Операция");
     Grid.Column<OperationAccounting> timeFact = crud.getGrid().addColumn(accounting -> accounting.getTimeSheets() != null
       ? accounting.getTimeSheets().stream()
       .mapToInt(OperationTimeSheet::getHours)
