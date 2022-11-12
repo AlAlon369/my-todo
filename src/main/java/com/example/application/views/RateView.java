@@ -32,13 +32,13 @@ public class RateView extends FormLayout {
     Grid<Rate> grid = crud.getGrid();
     grid.removeColumnByKey("id");
     grid.removeColumnByKey("operation");
-    Grid.Column<Rate> rate = grid.getColumnByKey("amount").setHeader("Норматив");
+    Grid.Column<Rate> rate = grid.getColumnByKey("amount").setHeader("Норма");
     Grid.Column<Rate> operation = grid.addColumn(r -> r.getOperation().getTitle()).setHeader("Операция");
     grid.setColumnOrder(List.of(operation, rate));
 
     CrudFormFactory<Rate> crudFormFactory = crud.getCrudFormFactory();
     crudFormFactory.setFieldCreationListener("id", field -> ((TextField) field).setVisible(false));
-    crudFormFactory.setFieldCreationListener("amount", field -> ((TextField) field).setLabel("Норматив"));
+    crudFormFactory.setFieldCreationListener("amount", field -> ((TextField) field).setLabel("Норма"));
     crudFormFactory.setFieldCreationListener("operation", field -> ((ComboBox<?>) field).setLabel("Операция"));
     crudFormFactory.setFieldProvider("operation",
       new ComboBoxProvider<>("Операция",
@@ -46,6 +46,7 @@ public class RateView extends FormLayout {
         new TextRenderer<>(Operation::getTitle),
         Operation::getTitle)
     );
+    crudFormFactory.setVisibleProperties("operation", "amount");
 
     add(crud);
   }

@@ -4,13 +4,16 @@ import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 public class OperationAccounting {
@@ -23,9 +26,12 @@ public class OperationAccounting {
   @ManyToOne
   @NotNull
   private Operation operation;
-  @OneToMany(fetch = FetchType.EAGER)
+  @OneToMany
+  @Fetch(value = FetchMode.JOIN)
   @JoinColumn(name = "operation_accounting_id")
   private List<OperationTimeSheet> timeSheets;
+  @OneToOne
+  private Rate rate;
 
   public Integer getId() {
     return id;
@@ -73,5 +79,13 @@ public class OperationAccounting {
 
   public void setDate(LocalDate date) {
     this.date = date;
+  }
+
+  public Rate getRate() {
+    return rate;
+  }
+
+  public void setRate(Rate rate) {
+    this.rate = rate;
   }
 }

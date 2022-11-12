@@ -38,16 +38,16 @@ public class AppLayoutBasic extends AppLayout {
         tabs.add(
                 createTab(VaadinIcon.SPECIALIST, "Сотрудники", EmployeesView.class),
                 createTab(VaadinIcon.SPECIALIST, "Операции", OperationView.class),
-                createTab(VaadinIcon.DATABASE, "Продукты", ProductView.class),
-                createTab(VaadinIcon.USER_CHECK, "Клиенты", ClientsView.class),
-                createTab(VaadinIcon.MONEY, "Типы расходов", CostView.class),
-                createTab(VaadinIcon.RANDOM, "Нормативы", RateView.class),
-                createTab(VaadinIcon.SPECIALIST, "Учет операций", OperationAccountingView.class),
-                createTab(VaadinIcon.HOURGLASS, "Общий табель учёта", GeneralTimeSheetView.class),
-                createTab(VaadinIcon.TIME_BACKWARD, "Отчет по общему табелю", GeneralTimeSheetReportView.class),
-                createTab(VaadinIcon.FACTORY, "Выпуск продукции", OutputView.class),
-                createTab(VaadinIcon.MONEY_WITHDRAW, "Таблица расходов", CostAccountingView.class),
-                createTab(VaadinIcon.USER_CHECK, "Заказы", BookingView.class)
+                // createTab(VaadinIcon.DATABASE, "Продукты", ProductView.class),
+                // createTab(VaadinIcon.USER_CHECK, "Клиенты", ClientsView.class),
+                // createTab(VaadinIcon.MONEY, "Типы расходов", CostView.class),
+                createTab(VaadinIcon.RANDOM, "Норма", RateView.class),
+                createTab(VaadinIcon.SPECIALIST, "Учет операций", OperationAccountingView.class)
+                // createTab(VaadinIcon.HOURGLASS, "Общий табель учёта", GeneralTimeSheetView.class),
+                // createTab(VaadinIcon.TIME_BACKWARD, "Отчет по общему табелю", GeneralTimeSheetReportView.class),
+                // createTab(VaadinIcon.FACTORY, "Выпуск продукции", OutputView.class),
+                // createTab(VaadinIcon.MONEY_WITHDRAW, "Таблица расходов", CostAccountingView.class),
+                // createTab(VaadinIcon.USER_CHECK, "Заказы", BookingView.class)
         );
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         return tabs;
