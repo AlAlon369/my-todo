@@ -15,7 +15,9 @@ import com.example.application.data.repository.RateRepository;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridSortOrder;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.provider.SortDirection;
 import com.vaadin.flow.data.renderer.TextRenderer;
 import com.vaadin.flow.router.Route;
 
@@ -35,6 +37,10 @@ public class RateView extends FormLayout {
     Grid.Column<Rate> rate = grid.getColumnByKey("amount").setHeader("Норма");
     Grid.Column<Rate> operation = grid.addColumn(r -> r.getOperation().getTitle()).setHeader("Операция");
     grid.setColumnOrder(List.of(operation, rate));
+    GridSortOrder<Rate> orderOperation = new GridSortOrder<>(operation, SortDirection.ASCENDING);
+    GridSortOrder<Rate> orderRate = new GridSortOrder<>(rate, SortDirection.ASCENDING);
+    grid.setMultiSort(true);
+    grid.sort(List.of(orderOperation, orderRate));
 
     CrudFormFactory<Rate> crudFormFactory = crud.getCrudFormFactory();
     crudFormFactory.setFieldCreationListener("id", field -> ((TextField) field).setVisible(false));
