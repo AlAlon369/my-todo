@@ -53,7 +53,7 @@ public class OperationAccountingView extends VerticalLayout {
     grid.removeColumnByKey("rate");
     Grid.Column<OperationAccounting> fact = grid.getColumnByKey("fact").setHeader("Факт");
     Grid.Column<OperationAccounting> plan = grid.getColumnByKey("plan").setHeader("План");
-    Grid.Column<OperationAccounting> date = grid.getColumnByKey("date").setHeader("Дата");
+    Grid.Column<OperationAccounting> date = grid.getColumnByKey("date").setHeader("Дата").setAutoWidth(true);
     Grid.Column<OperationAccounting> operationName = crud.getGrid()
       .addColumn(accounting -> accounting.getOperation().getTitle())
       .setHeader("Операция")
@@ -103,8 +103,8 @@ public class OperationAccountingView extends VerticalLayout {
       new ComboBoxProvider<>(
         "Норма",
         rateRepository.findAll(),
-        new TextRenderer<>(rate -> rate.getOperation().getTitle() + " " + rate.getAmount()),
-        rate -> String.valueOf(rate.getAmount())
+        new TextRenderer<>(rate -> rate.getOperation().getTitle() + ": " + rate.getAmount()),
+        rate -> rate.getOperation().getTitle() + ": " + rate.getAmount()
       ));
   }
 
