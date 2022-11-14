@@ -32,7 +32,9 @@ public class OperationAccountingView extends VerticalLayout {
                                  OperationRepository operationRepository,
                                  RateRepository rateRepository) {
     GridCrud<OperationAccounting> crud = new GridCrud<>(OperationAccounting.class);
-    crud.setFindAllOperation(repository::findAll);
+    DatePicker filter = createFilter(crud);
+    crud.setFindAllOperation(
+      () -> filter.getValue() == null ? repository.findAll() : repository.findAllByDate(filter.getValue()));
     crud.setAddOperation(repository::save);
     crud.setUpdateOperation(repository::save);
     crud.setDeleteOperation(repository::delete);
@@ -43,6 +45,15 @@ public class OperationAccountingView extends VerticalLayout {
     crud.setWidth("70%");
     setSizeFull();
     add(crud);
+  }
+
+  private DatePicker createFilter(GridCrud<OperationAccounting> crud) {
+    DatePicker filter = new DatePicker();
+    filter.setPlaceholder("Фильтр по дате");
+    filter.setClearButtonVisible(true);
+    filter.addValueChangeListener(e -> crud.refreshGrid());
+    crud.getCrudLayout().addFilterComponent(filter);
+    return filter;
   }
 
   private void tuneColumns(GridCrud<OperationAccounting> crud) {
