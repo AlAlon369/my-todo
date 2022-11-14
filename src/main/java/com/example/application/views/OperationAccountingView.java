@@ -1,7 +1,6 @@
 package com.example.application.views;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
@@ -36,7 +35,10 @@ public class OperationAccountingView extends VerticalLayout {
     GridCrud<OperationAccounting> crud = new GridCrud<>(OperationAccounting.class);
     DatePicker filter = createFilter(crud);
     crud.setFindAllOperation(() -> repository.findAllByDate(filter.getValue()));
-    crud.setAddOperation(repository::save);
+    crud.setAddOperation(entity -> {
+      entity.setDate(filter.getValue());
+      return repository.save(entity);
+    });
     crud.setUpdateOperation(repository::save);
     crud.setDeleteOperation(repository::delete);
 
@@ -65,10 +67,6 @@ public class OperationAccountingView extends VerticalLayout {
     grid.removeColumnByKey("date");
     Grid.Column<OperationAccounting> fact = grid.getColumnByKey("fact").setHeader("Факт");
     Grid.Column<OperationAccounting> plan = grid.getColumnByKey("plan").setHeader("План");
-    DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    Grid.Column<OperationAccounting> date = grid
-      .addColumn(operationAccounting -> operationAccounting.getDate().format(pattern))
-      .setHeader("Дата");
     Grid.Column<OperationAccounting> operationName = grid
       .addColumn(accounting -> accounting.getOperation().getTitle())
       .setHeader("Операция")
@@ -91,7 +89,7 @@ public class OperationAccountingView extends VerticalLayout {
           )));
       return timeButton;
     }).setWidth("150px").setFlexGrow(0);
-    grid.setColumnOrder(List.of(date, operationName, plan, fact, rateMultiplyHours, rateColumn, timeFact, clock));
+    grid.setColumnOrder(List.of(operationName, plan, fact, rateMultiplyHours, rateColumn, timeFact, clock));
     GridSortOrder<OperationAccounting> operationSort = new GridSortOrder<>(operationName, SortDirection.ASCENDING);
     grid.sort(List.of(operationSort));
   }
@@ -102,12 +100,11 @@ public class OperationAccountingView extends VerticalLayout {
   ) {
     CrudFormFactory<OperationAccounting> crudFormFactory = crud.getCrudFormFactory();
     crudFormFactory.setUseBeanValidation(true);
-    crudFormFactory.setFieldCreationListener("date", field -> ((DatePicker) field).setLabel("Дата"));
     crudFormFactory.setFieldCreationListener("plan", field -> ((TextField) field).setLabel("План"));
     crudFormFactory.setFieldCreationListener("fact", field -> ((TextField) field).setLabel("Факт"));
     crudFormFactory.setFieldCreationListener("rate", field -> ((ComboBox<?>) field).setLabel("Норма"));
     crudFormFactory.setFieldCreationListener("operation", field -> ((ComboBox<?>) field).setLabel("Операция"));
-    crudFormFactory.setVisibleProperties("operation", "date", "plan", "fact", "rate");
+    crudFormFactory.setVisibleProperties("operation", "plan", "fact", "rate");
     crudFormFactory.setFieldProvider("operation",
       new ComboBoxProvider<>(
         "Операция",
