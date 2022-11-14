@@ -10,7 +10,7 @@ public class OperationTimeSheet {
   @Id
   @GeneratedValue
   private Integer id;
-  private Integer hours;
+  private double hours;
   @ManyToOne
   private Employee employee;
   @ManyToOne
@@ -24,11 +24,11 @@ public class OperationTimeSheet {
     this.id = id;
   }
 
-  public Integer getHours() {
+  public double getHours() {
     return hours;
   }
 
-  public void setHours(Integer hours) {
+  public void setHours(double hours) {
     this.hours = hours;
   }
 

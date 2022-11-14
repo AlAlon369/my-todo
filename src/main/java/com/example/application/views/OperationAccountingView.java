@@ -77,8 +77,10 @@ public class OperationAccountingView extends VerticalLayout {
       return timeButton;
     }).setWidth("150px").setFlexGrow(0);
     grid.setColumnOrder(List.of(date, operationName, plan, fact, rateMultiplyHours, rateColumn, timeFact, clock));
-    GridSortOrder<OperationAccounting> order = new GridSortOrder<>(date, SortDirection.DESCENDING);
-    grid.sort(List.of(order));
+    GridSortOrder<OperationAccounting> dateSort = new GridSortOrder<>(date, SortDirection.DESCENDING);
+    GridSortOrder<OperationAccounting> operationSort = new GridSortOrder<>(operationName, SortDirection.ASCENDING);
+    grid.setMultiSort(true);
+    grid.sort(List.of(dateSort, operationSort));
   }
 
   private void tuneFields(OperationRepository operationRepository,
@@ -90,28 +92,29 @@ public class OperationAccountingView extends VerticalLayout {
     crudFormFactory.setFieldCreationListener("date", field -> ((DatePicker) field).setLabel("Дата"));
     crudFormFactory.setFieldCreationListener("plan", field -> ((TextField) field).setLabel("План"));
     crudFormFactory.setFieldCreationListener("fact", field -> ((TextField) field).setLabel("Факт"));
+    crudFormFactory.setFieldCreationListener("rate", field -> ((ComboBox<?>) field).setLabel("Норма"));
     crudFormFactory.setFieldCreationListener("operation", field -> ((ComboBox<?>) field).setLabel("Операция"));
     crudFormFactory.setVisibleProperties("operation", "date", "plan", "fact", "rate");
     crudFormFactory.setFieldProvider("operation",
       new ComboBoxProvider<>(
         "Операция",
-        operationRepository.findAll(),
+        operationRepository.findAllByOrderByTitleAsc(),
         new TextRenderer<>(Operation::getTitle),
         Operation::getTitle
       ));
     crudFormFactory.setFieldProvider("rate",
       new ComboBoxProvider<>(
         "Норма",
-        rateRepository.findAll(),
+        rateRepository.findAllByOrderByOperationAscAmountAsc(),
         new TextRenderer<>(rate -> rate.getOperation().getTitle() + ": " + rate.getAmount()),
         rate -> rate.getOperation().getTitle() + ": " + rate.getAmount()
       ));
   }
 
-  private int getTimeSheetsSum(OperationAccounting accounting) {
+  private double getTimeSheetsSum(OperationAccounting accounting) {
     return accounting.getTimeSheets() != null
       ? accounting.getTimeSheets().stream()
-      .mapToInt(OperationTimeSheet::getHours)
+      .mapToDouble(OperationTimeSheet::getHours)
       .sum()
       : 0;
   }
