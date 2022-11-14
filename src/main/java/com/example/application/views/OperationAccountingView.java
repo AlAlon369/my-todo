@@ -1,5 +1,7 @@
 package com.example.application.views;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
@@ -33,8 +35,7 @@ public class OperationAccountingView extends VerticalLayout {
                                  RateRepository rateRepository) {
     GridCrud<OperationAccounting> crud = new GridCrud<>(OperationAccounting.class);
     DatePicker filter = createFilter(crud);
-    crud.setFindAllOperation(
-      () -> filter.getValue() == null ? repository.findAll() : repository.findAllByDate(filter.getValue()));
+    crud.setFindAllOperation(() -> repository.findAllByDate(filter.getValue()));
     crud.setAddOperation(repository::save);
     crud.setUpdateOperation(repository::save);
     crud.setDeleteOperation(repository::delete);
@@ -49,8 +50,7 @@ public class OperationAccountingView extends VerticalLayout {
 
   private DatePicker createFilter(GridCrud<OperationAccounting> crud) {
     DatePicker filter = new DatePicker();
-    filter.setPlaceholder("Фильтр по дате");
-    filter.setClearButtonVisible(true);
+    filter.setValue(LocalDate.now());
     filter.addValueChangeListener(e -> crud.refreshGrid());
     crud.getCrudLayout().addFilterComponent(filter);
     return filter;
@@ -62,21 +62,25 @@ public class OperationAccountingView extends VerticalLayout {
     grid.removeColumnByKey("timeSheets");
     grid.removeColumnByKey("operation");
     grid.removeColumnByKey("rate");
+    grid.removeColumnByKey("date");
     Grid.Column<OperationAccounting> fact = grid.getColumnByKey("fact").setHeader("Факт");
     Grid.Column<OperationAccounting> plan = grid.getColumnByKey("plan").setHeader("План");
-    Grid.Column<OperationAccounting> date = grid.getColumnByKey("date").setHeader("Дата").setAutoWidth(true);
-    Grid.Column<OperationAccounting> operationName = crud.getGrid()
+    DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    Grid.Column<OperationAccounting> date = grid
+      .addColumn(operationAccounting -> operationAccounting.getDate().format(pattern))
+      .setHeader("Дата");
+    Grid.Column<OperationAccounting> operationName = grid
       .addColumn(accounting -> accounting.getOperation().getTitle())
       .setHeader("Операция")
       .setAutoWidth(true);
-    Grid.Column<OperationAccounting> rateColumn = crud.getGrid()
+    Grid.Column<OperationAccounting> rateColumn = grid
       .addColumn(accounting -> accounting.getRate() != null ? accounting.getRate().getAmount() : 0)
       .setHeader("Норма");
-    Grid.Column<OperationAccounting> rateMultiplyHours = crud.getGrid()
+    Grid.Column<OperationAccounting> rateMultiplyHours = grid
       .addColumn(accounting -> accounting.getRate() != null ? accounting.getRate().getAmount() * getTimeSheetsSum(accounting) : 0)
       .setHeader("Норма*Часы")
       .setAutoWidth(true);
-    Grid.Column<OperationAccounting> timeFact = crud.getGrid().addColumn(this::getTimeSheetsSum).setHeader("Часы");
+    Grid.Column<OperationAccounting> timeFact = grid.addColumn(this::getTimeSheetsSum).setHeader("Часы");
     Grid.Column<OperationAccounting> clock = grid.addComponentColumn(accounting -> {
       Button timeButton = new Button("Часы");
       timeButton.addClickListener(e ->
@@ -88,10 +92,8 @@ public class OperationAccountingView extends VerticalLayout {
       return timeButton;
     }).setWidth("150px").setFlexGrow(0);
     grid.setColumnOrder(List.of(date, operationName, plan, fact, rateMultiplyHours, rateColumn, timeFact, clock));
-    GridSortOrder<OperationAccounting> dateSort = new GridSortOrder<>(date, SortDirection.DESCENDING);
     GridSortOrder<OperationAccounting> operationSort = new GridSortOrder<>(operationName, SortDirection.ASCENDING);
-    grid.setMultiSort(true);
-    grid.sort(List.of(dateSort, operationSort));
+    grid.sort(List.of(operationSort));
   }
 
   private void tuneFields(OperationRepository operationRepository,
