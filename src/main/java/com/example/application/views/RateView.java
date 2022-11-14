@@ -13,9 +13,9 @@ import com.example.application.data.entity.Rate;
 import com.example.application.data.repository.OperationRepository;
 import com.example.application.data.repository.RateRepository;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridSortOrder;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.SortDirection;
 import com.vaadin.flow.data.renderer.TextRenderer;
@@ -23,7 +23,7 @@ import com.vaadin.flow.router.Route;
 
 @Route(value = "rate", layout = AppLayoutBasic.class)
 @RolesAllowed("USER")
-public class RateView extends FormLayout {
+public class RateView extends VerticalLayout {
   public RateView(RateRepository repository, OperationRepository operationRepository) {
     GridCrud<Rate> crud = new GridCrud<>(Rate.class);
     crud.setFindAllOperation(repository::findAll);
@@ -53,7 +53,8 @@ public class RateView extends FormLayout {
         Operation::getTitle)
     );
     crudFormFactory.setVisibleProperties("operation", "amount");
-
+    crud.setWidth("50%");
+    setSizeFull();
     add(crud);
   }
 }

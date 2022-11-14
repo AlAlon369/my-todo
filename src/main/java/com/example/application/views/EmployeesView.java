@@ -1,6 +1,8 @@
 
 package com.example.application.views;
 
+import java.util.List;
+
 import javax.annotation.security.RolesAllowed;
 
 import org.vaadin.crudui.crud.impl.GridCrud;
@@ -9,14 +11,16 @@ import org.vaadin.crudui.form.CrudFormFactory;
 import com.example.application.data.entity.Employee;
 import com.example.application.data.repository.EmployeeRepository;
 import com.vaadin.flow.component.checkbox.Checkbox;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridSortOrder;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.provider.SortDirection;
 import com.vaadin.flow.router.Route;
 
 @Route(value = "employees", layout = AppLayoutBasic.class)
 @RolesAllowed("USER")
-public class EmployeesView extends FormLayout {
+public class EmployeesView extends VerticalLayout {
 
     public EmployeesView(EmployeeRepository repository) {
         GridCrud<Employee> crud = new GridCrud<>(Employee.class);
@@ -27,7 +31,8 @@ public class EmployeesView extends FormLayout {
 
         setColumns(crud);
         translateForms(crud);
-
+        crud.setWidth("50%");
+        setSizeFull();
         add(crud);
     }
 
@@ -43,11 +48,13 @@ public class EmployeesView extends FormLayout {
     private void setColumns(GridCrud<Employee> crud) {
         Grid<Employee> grid = crud.getGrid();
         grid.getColumnByKey("firstName").setHeader("Имя");
-        grid.getColumnByKey("lastName").setHeader("Фамилия");
+        Grid.Column<Employee> employeeColumn = grid.getColumnByKey("lastName").setHeader("Фамилия");
         grid.getColumnByKey("phone").setHeader("Телефон");
         grid.getColumnByKey("hired").setVisible(false);
         grid.getColumnByKey("id").setVisible(false);
         grid.addColumn(employee -> Boolean.TRUE.equals(employee.getHired()) ? "Да" : "Нет").setHeader("Нанят");
+        GridSortOrder<Employee> employeeSort = new GridSortOrder<>(employeeColumn, SortDirection.ASCENDING);
+        grid.sort(List.of(employeeSort));
     }
 }
 
