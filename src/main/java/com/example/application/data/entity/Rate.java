@@ -10,7 +10,7 @@ public class Rate {
   @Id
   @GeneratedValue
   private Integer id;
-  private Integer amount;
+  private double amount;
   @ManyToOne
   private Operation operation;
 
@@ -31,11 +31,11 @@ public class Rate {
   }
 
 
-  public Integer getAmount() {
+  public double getAmount() {
     return amount;
   }
 
-  public void setAmount(Integer amount) {
+  public void setAmount(double amount) {
     this.amount = amount;
   }
 }
