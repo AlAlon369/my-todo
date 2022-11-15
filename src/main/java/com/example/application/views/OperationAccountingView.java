@@ -33,7 +33,7 @@ public class OperationAccountingView extends VerticalLayout {
                                  OperationRepository operationRepository,
                                  RateRepository rateRepository) {
     GridCrud<OperationAccounting> crud = new GridCrud<>(OperationAccounting.class);
-    DatePicker filter = createFilter(crud);
+    DatePicker filter = createFilter(crud, repository);
     crud.setFindAllOperation(() -> repository.findAllByDate(filter.getValue()));
     crud.setAddOperation(entity -> {
       entity.setDate(filter.getValue());
@@ -42,7 +42,7 @@ public class OperationAccountingView extends VerticalLayout {
     crud.setUpdateOperation(repository::save);
     crud.setDeleteOperation(repository::delete);
 
-    tuneColumns(crud);
+    tuneColumns(crud, filter, repository);
     tuneFields(operationRepository, rateRepository, crud);
 
     crud.setWidth("70%");
@@ -50,15 +50,18 @@ public class OperationAccountingView extends VerticalLayout {
     add(crud);
   }
 
-  private DatePicker createFilter(GridCrud<OperationAccounting> crud) {
+  private DatePicker createFilter(GridCrud<OperationAccounting> crud, OperationAccountingRepository repository) {
     DatePicker filter = new DatePicker();
     filter.setValue(LocalDate.now());
-    filter.addValueChangeListener(e -> crud.refreshGrid());
+    filter.addValueChangeListener(e -> {
+      crud.refreshGrid();
+      crud.getGrid().getColumnByKey("timeFact").setFooter(getTimeSheetsSum(filter, repository));
+    });
     crud.getCrudLayout().addFilterComponent(filter);
     return filter;
   }
 
-  private void tuneColumns(GridCrud<OperationAccounting> crud) {
+  private void tuneColumns(GridCrud<OperationAccounting> crud, DatePicker filter, OperationAccountingRepository repository) {
     Grid<OperationAccounting> grid = crud.getGrid();
     grid.removeColumnByKey("id");
     grid.removeColumnByKey("timeSheets");
@@ -78,7 +81,7 @@ public class OperationAccountingView extends VerticalLayout {
       .addColumn(accounting -> accounting.getRate() != null ? accounting.getRate().getAmount() * getTimeSheetsSum(accounting) : 0)
       .setHeader("Норма*Часы")
       .setAutoWidth(true);
-    Grid.Column<OperationAccounting> timeFact = grid.addColumn(this::getTimeSheetsSum).setHeader("Часы");
+    Grid.Column<OperationAccounting> timeFact = grid.addColumn(this::getTimeSheetsSum).setHeader("Часы").setKey("timeFact");
     Grid.Column<OperationAccounting> clock = grid.addComponentColumn(accounting -> {
       Button timeButton = new Button("Часы");
       timeButton.addClickListener(e ->
@@ -92,6 +95,15 @@ public class OperationAccountingView extends VerticalLayout {
     grid.setColumnOrder(List.of(operationName, plan, fact, rateMultiplyHours, rateColumn, timeFact, clock));
     GridSortOrder<OperationAccounting> operationSort = new GridSortOrder<>(operationName, SortDirection.ASCENDING);
     grid.sort(List.of(operationSort));
+    timeFact.setFooter(getTimeSheetsSum(filter, repository));
+  }
+
+  private String getTimeSheetsSum(DatePicker filter, OperationAccountingRepository repository) {
+    double sum = repository.findAllByDate(filter.getValue())
+      .stream()
+      .mapToDouble(this::getTimeSheetsSum)
+      .sum();
+    return String.valueOf(sum);
   }
 
   private void tuneFields(OperationRepository operationRepository,
