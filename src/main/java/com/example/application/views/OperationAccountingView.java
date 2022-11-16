@@ -56,7 +56,7 @@ public class OperationAccountingView extends VerticalLayout {
     GridCrud<OperationAccounting> accountingGridCrud = new GridCrud<>(OperationAccounting.class);
     DatePicker filter = createFilter(accountingGridCrud);
     tuneAccountingGridCrud(accountingGridCrud, filter);
-    tuneAccountingColumns(accountingGridCrud, filter);
+    tuneAccountingColumns(accountingGridCrud);
     tuneAccountingFields(accountingGridCrud);
 
     GridCrud<OperationTimeSheet> timeSheetGridCrud = createTimeSheetGridCrud(accountingGridCrud);
@@ -150,15 +150,12 @@ public class OperationAccountingView extends VerticalLayout {
   private DatePicker createFilter(GridCrud<OperationAccounting> crud) {
     DatePicker filter = new DatePicker();
     filter.setValue(LocalDate.now());
-    filter.addValueChangeListener(e -> {
-      crud.refreshGrid();
-      crud.getGrid().getColumnByKey("timeFact").setFooter(getTimeSheetsSum(filter, repository));
-    });
+    filter.addValueChangeListener(e -> crud.refreshGrid());
     crud.getCrudLayout().addFilterComponent(filter);
     return filter;
   }
 
-  private void tuneAccountingColumns(GridCrud<OperationAccounting> crud, DatePicker filter) {
+  private void tuneAccountingColumns(GridCrud<OperationAccounting> crud) {
     Grid<OperationAccounting> grid = crud.getGrid();
     grid.removeColumnByKey("id");
     grid.removeColumnByKey("timeSheets");
@@ -182,7 +179,6 @@ public class OperationAccountingView extends VerticalLayout {
     grid.setColumnOrder(List.of(operationName, plan, fact, rateMultiplyHours, rateColumn, timeFact));
     GridSortOrder<OperationAccounting> operationSort = new GridSortOrder<>(operationName, SortDirection.ASCENDING);
     grid.sort(List.of(operationSort));
-    timeFact.setFooter(getTimeSheetsSum(filter, repository));
   }
 
   private void tuneAccountingFields(GridCrud<OperationAccounting> crud
@@ -216,13 +212,5 @@ public class OperationAccountingView extends VerticalLayout {
       .mapToDouble(OperationTimeSheet::getHours)
       .sum()
       : 0;
-  }
-
-  private String getTimeSheetsSum(DatePicker filter, OperationAccountingRepository repository) {
-    double sum = repository.findAllByDate(filter.getValue())
-      .stream()
-      .mapToDouble(this::getTimeSheetsSum)
-      .sum();
-    return String.valueOf(sum);
   }
 }
