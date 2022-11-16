@@ -34,20 +34,34 @@ import com.vaadin.flow.router.Route;
 @Route(value = "operation_accounting", layout = AppLayoutBasic.class)
 @RolesAllowed("USER")
 public class OperationAccountingView extends VerticalLayout {
+
+  private final transient OperationAccountingRepository repository;
+  private final transient OperationRepository operationRepository;
+  private final transient RateRepository rateRepository;
+  private final transient OperationTimeSheetRepository timeSheetRepository;
+  private final transient EmployeeRepository employeeRepository;
+
+
   public OperationAccountingView(OperationAccountingRepository repository,
                                  OperationRepository operationRepository,
                                  RateRepository rateRepository,
                                  OperationTimeSheetRepository timeSheetRepository,
                                  EmployeeRepository employeeRepository) {
-    GridCrud<OperationAccounting> accountingGridCrud = new GridCrud<>(OperationAccounting.class);
-    DatePicker filter = createFilter(accountingGridCrud, repository);
-    tuneAccountingGridCrud(repository, accountingGridCrud, filter);
-    tuneAccountingColumns(accountingGridCrud, filter, repository);
-    tuneAccountingFields(operationRepository, rateRepository, accountingGridCrud);
+    this.repository = repository;
+    this.operationRepository = operationRepository;
+    this.rateRepository = rateRepository;
+    this.timeSheetRepository = timeSheetRepository;
+    this.employeeRepository = employeeRepository;
 
-    GridCrud<OperationTimeSheet> timeSheetGridCrud = createTimeSheetGridCrud(timeSheetRepository, accountingGridCrud);
+    GridCrud<OperationAccounting> accountingGridCrud = new GridCrud<>(OperationAccounting.class);
+    DatePicker filter = createFilter(accountingGridCrud);
+    tuneAccountingGridCrud(accountingGridCrud, filter);
+    tuneAccountingColumns(accountingGridCrud, filter);
+    tuneAccountingFields(accountingGridCrud);
+
+    GridCrud<OperationTimeSheet> timeSheetGridCrud = createTimeSheetGridCrud(accountingGridCrud);
     tuneTimeSheetColumns(timeSheetGridCrud);
-    tuneTimeSheetFields(employeeRepository, timeSheetGridCrud);
+    tuneTimeSheetFields(timeSheetGridCrud);
 
     accountingGridCrud.getGrid().addSelectionListener(event -> {
       timeSheetGridCrud.setVisible(!event.getAllSelectedItems().isEmpty());
@@ -61,8 +75,7 @@ public class OperationAccountingView extends VerticalLayout {
     add(horizontalLayout);
   }
 
-  private GridCrud<OperationTimeSheet> createTimeSheetGridCrud(OperationTimeSheetRepository timeSheetRepository,
-                                                               GridCrud<OperationAccounting> accountingGridCrud) {
+  private GridCrud<OperationTimeSheet> createTimeSheetGridCrud(GridCrud<OperationAccounting> accountingGridCrud) {
     GridCrud<OperationTimeSheet> timeSheetGridCrud = new GridCrud<>(OperationTimeSheet.class);
     timeSheetGridCrud.setVisible(false);
     timeSheetGridCrud.setAddOperation(entity -> saveTimeSheet(timeSheetRepository, accountingGridCrud, entity));
@@ -96,8 +109,7 @@ public class OperationAccountingView extends VerticalLayout {
     return save;
   }
 
-  private void tuneAccountingGridCrud(OperationAccountingRepository repository,
-                                      GridCrud<OperationAccounting> accountingGridCrud,
+  private void tuneAccountingGridCrud(GridCrud<OperationAccounting> accountingGridCrud,
                                       DatePicker filter) {
     accountingGridCrud.setFindAllOperation(() -> repository.findAllByDate(filter.getValue()));
     accountingGridCrud.setAddOperation(entity -> {
@@ -109,7 +121,7 @@ public class OperationAccountingView extends VerticalLayout {
     accountingGridCrud.setWidth("70%");
   }
 
-  private void tuneTimeSheetFields(EmployeeRepository employeeRepository, GridCrud<OperationTimeSheet> timeSheetGridCrud) {
+  private void tuneTimeSheetFields(GridCrud<OperationTimeSheet> timeSheetGridCrud) {
     CrudFormFactory<OperationTimeSheet> crudFormFactory = timeSheetGridCrud.getCrudFormFactory();
     crudFormFactory.setFieldCreationListener("id", field -> ((TextField) field).setVisible(false));
     crudFormFactory.setFieldCreationListener("hours", field -> ((TextField) field).setLabel("Часы"));
@@ -135,7 +147,7 @@ public class OperationAccountingView extends VerticalLayout {
     timeSheetGrid.setColumnOrder(List.of(employee, hours));
   }
 
-  private DatePicker createFilter(GridCrud<OperationAccounting> crud, OperationAccountingRepository repository) {
+  private DatePicker createFilter(GridCrud<OperationAccounting> crud) {
     DatePicker filter = new DatePicker();
     filter.setValue(LocalDate.now());
     filter.addValueChangeListener(e -> {
@@ -146,8 +158,7 @@ public class OperationAccountingView extends VerticalLayout {
     return filter;
   }
 
-  private void tuneAccountingColumns(GridCrud<OperationAccounting> crud, DatePicker filter,
-                                     OperationAccountingRepository repository) {
+  private void tuneAccountingColumns(GridCrud<OperationAccounting> crud, DatePicker filter) {
     Grid<OperationAccounting> grid = crud.getGrid();
     grid.removeColumnByKey("id");
     grid.removeColumnByKey("timeSheets");
@@ -174,9 +185,7 @@ public class OperationAccountingView extends VerticalLayout {
     timeFact.setFooter(getTimeSheetsSum(filter, repository));
   }
 
-  private void tuneAccountingFields(OperationRepository operationRepository,
-                                    RateRepository rateRepository,
-                                    GridCrud<OperationAccounting> crud
+  private void tuneAccountingFields(GridCrud<OperationAccounting> crud
   ) {
     CrudFormFactory<OperationAccounting> crudFormFactory = crud.getCrudFormFactory();
     crudFormFactory.setUseBeanValidation(true);
